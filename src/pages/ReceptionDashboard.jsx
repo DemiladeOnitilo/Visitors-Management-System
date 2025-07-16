@@ -80,7 +80,7 @@ const ReceptionDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF4ED] px-6 py-10 relative">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-10">
+      <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-4 mb-10">
         <div>
           <h1 className="text-4xl font-bold text-[#2E2E2E]">
             Welcome, {receptionist?.name || "Receptionist"}
@@ -92,7 +92,7 @@ const ReceptionDashboard = () => {
             localStorage.removeItem("receptionist");
             navigate("/admin/reception/login");
           }}
-          className="flex items-center gap-2 bg-[#FF6B6B] hover:bg-[#3A3D46] text-white px-5 py-3 rounded-xl font-semibold transition-colors duration-300 cursor-pointer w-full md:w-auto justify-center"
+          className="flex items-center gap-2 bg-[#FF6B6B] hover:bg-[#3A3D46] text-white px-5 py-3 rounded-xl font-semibold transition-colors duration-300 cursor-pointer w-auto md:w-auto justify-center"
         >
           <FiLogOut size={18} />
           Log Out
