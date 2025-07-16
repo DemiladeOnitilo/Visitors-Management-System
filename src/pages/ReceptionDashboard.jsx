@@ -80,7 +80,14 @@ const ReceptionDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF4ED] px-6 py-10 relative">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+        <div>
+          <h1 className="text-4xl font-bold text-[#2E2E2E]">
+            Welcome, {receptionist?.name || "Receptionist"}
+          </h1>
+          <p className="text-gray-600">Reception Dashboard</p>
+        </div>
+
         <button
           onClick={() => {
             localStorage.removeItem("receptionist");
@@ -91,13 +98,6 @@ const ReceptionDashboard = () => {
           <FiLogOut size={18} />
           Log Out
         </button>
-
-        <div>
-          <h1 className="text-4xl font-bold text-[#2E2E2E]">
-            Welcome, {receptionist?.name || "Receptionist"}
-          </h1>
-          <p className="text-gray-600">Reception Dashboard</p>
-        </div>
       </div>
 
       <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8 w-full">

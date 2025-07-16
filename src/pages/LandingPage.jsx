@@ -37,7 +37,7 @@ const LandingPage = () => {
 
         <div className="flex-1">
           <img
-            src="https://www.swipedon.com/hs-fs/hubfs/_SwipedOn%20Product%20Photography/SwipedOn%20Reception%202.jpg?width=817&height=544&name=SwipedOn%20Reception%202.jpg"
+            src="https://media.istockphoto.com/id/1408468592/photo/happy-young-successful-female-receptionist-in-uniform-standing-by-counter.jpg?s=612x612&w=0&k=20&c=zaJWvFY00uVlz78_g39b_q7aG3YIikCVv2AvLaExrpc="
             alt="Visitors illustration"
             className="rounded-3xl shadow-2xl w-full object-cover"
           />
