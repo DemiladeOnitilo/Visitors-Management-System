@@ -80,23 +80,24 @@ const ReceptionDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF4ED] px-6 py-10 relative">
-      <div className="flex flex-col-reverse md:flex-row md:justify-between md:items-center gap-4 mb-10">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-10">
+        <button
+          onClick={() => {
+            localStorage.removeItem("receptionist");
+            navigate("/admin/reception/login");
+          }}
+          className="self-start w-fit md:w-auto flex items-center gap-2 bg-[#FF6B6B] hover:bg-[#3A3D46] text-white px-5 py-3 rounded-xl font-semibold transition-colors duration-300 cursor-pointer"
+        >
+          <FiLogOut size={18} />
+          Log Out
+        </button>
+
         <div>
           <h1 className="text-4xl font-bold text-[#2E2E2E]">
             Welcome, {receptionist?.name || "Receptionist"}
           </h1>
           <p className="text-gray-600">Reception Dashboard</p>
         </div>
-        <button
-          onClick={() => {
-            localStorage.removeItem("receptionist");
-            navigate("/admin/reception/login");
-          }}
-          className="flex items-center gap-2 bg-[#FF6B6B] hover:bg-[#3A3D46] text-white px-5 py-3 rounded-xl font-semibold transition-colors duration-300 cursor-pointer w-auto md:w-auto justify-center"
-        >
-          <FiLogOut size={18} />
-          Log Out
-        </button>
       </div>
 
       <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8 w-full">
@@ -205,9 +206,18 @@ const ReceptionDashboard = () => {
         )}
       </div>
 
-      <SearchModal selectedVisit={selectedVisit} visitFoundModal={visitFoundModal} setVisitFoundModal={setVisitFoundModal}  />
+      <SearchModal
+        selectedVisit={selectedVisit}
+        visitFoundModal={visitFoundModal}
+        setVisitFoundModal={setVisitFoundModal}
+      />
 
-      <DeleteModal confirmDelete={confirmDelete} confirmDeleteModal={confirmDeleteModal} visitToDelete={visitToDelete} cancelDelete={cancelDelete} />
+      <DeleteModal
+        confirmDelete={confirmDelete}
+        confirmDeleteModal={confirmDeleteModal}
+        visitToDelete={visitToDelete}
+        cancelDelete={cancelDelete}
+      />
 
       <ToastContainer />
     </div>
