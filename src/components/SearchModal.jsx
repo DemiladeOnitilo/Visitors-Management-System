@@ -26,6 +26,7 @@ const SearchModal = ({
           justifyContent: "center",
           backgroundColor: "rgba(0,0,0,0.7)",
           backdropFilter: "blur(8px)",
+          zIndex: 9999,
         },
         content: {
           position: "static",
@@ -46,7 +47,7 @@ const SearchModal = ({
         },
       }}
     >
-      <div className="relative">
+      <div className="relative ">
         <div className="bg-gradient-to-r from-orange-500 to-red-600  p-6 text-center relative">
           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
           <div className="relative z-10">

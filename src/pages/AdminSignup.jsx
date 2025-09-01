@@ -90,9 +90,7 @@ const AdminSignup = () => {
 
     const admins = JSON.parse(localStorage.getItem("admins")) || [];
 
-    const emailExists = admins.find(
-      (admin) => admin.email === formData.email
-    );
+    const emailExists = admins.find((admin) => admin.email === formData.email);
 
     if (emailExists) {
       setError({
@@ -124,7 +122,7 @@ const AdminSignup = () => {
     <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative">
       <button
         onClick={() => navigate("/admin/login")}
-        className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
+        className="absolute top-6 left-6 z-100 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
       >
         <FiArrowLeft size={20} />
         <span className="hidden md:block">Back to Login</span>
@@ -141,8 +139,8 @@ const AdminSignup = () => {
         <div className="flex flex-col items-center text-center gap-4">
           <h1 className="text-5xl md:text-6xl font-bold">Join Our Team</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Create your admin account to access the visitor management system with
-            appropriate permissions and tools
+            Create your admin account to access the visitor management system
+            with appropriate permissions and tools
           </p>
         </div>
 
@@ -203,17 +201,18 @@ const AdminSignup = () => {
             </button>
           </div>
 
-          <button
-                   className="w-full mt-8 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg overflow-hidden group cursor-pointer relative shadow-lg hover:shadow-xl transition-all duration-300"
-                 >
-                   <span className="relative z-10 flex items-center justify-center gap-3">
-                    Sign Up
-                    <FiArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
-                   </span>
-                   <div className="absolute inset-0 bg-gradient-to-r from-slate-600 to-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
-                   
-                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                 </button>
+          <button className="w-full mt-8 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg overflow-hidden group cursor-pointer relative shadow-lg hover:shadow-xl transition-all duration-300">
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              Sign Up
+              <FiArrowRight
+                size={20}
+                className="group-hover:translate-x-1 transition-transform duration-300"
+              />
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-600 to-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
+
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+          </button>
 
           <div className="mt-6 p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
             <div className="flex items-start gap-3">
@@ -227,8 +226,8 @@ const AdminSignup = () => {
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Your account will be secured with enterprise-grade encryption.
-                  All registration attempts are monitored and logged for security
-                  purposes.
+                  All registration attempts are monitored and logged for
+                  security purposes.
                 </p>
               </div>
             </div>

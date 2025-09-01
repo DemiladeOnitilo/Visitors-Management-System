@@ -178,7 +178,7 @@ const AdminForm = () => {
     <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative">
       <button
         onClick={() => navigate("/admin")}
-        className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
+        className="absolute top-6 left-6 z-100 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
       >
         <FiArrowLeft size={20} />
         <span className="hidden md:block">Back to Login</span>

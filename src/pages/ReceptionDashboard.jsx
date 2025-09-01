@@ -7,6 +7,7 @@ import {
   FiUser,
   FiCalendar,
   FiClock,
+  FiArrowRight,
 } from "react-icons/fi";
 import { FaUserTie } from "react-icons/fa";
 import Modal from "react-modal";
@@ -107,10 +108,12 @@ const ReceptionDashboard = () => {
             localStorage.removeItem("receptionist");
             navigate("/admin/reception/login");
           }}
-          className="relative flex items-center gap-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-gray-700 hover:to-gray-800 text-white px-6 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group"
+          className="relative flex items-center gap-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group"
         >
-          <FiLogOut size={20} />
-          <span className="relative z-5">Log Out</span>
+          <span className="realtive z-10 text-white">
+            <FiLogOut size={20} />
+          </span>
+          <span className="relative z-10">Log Out</span>
           <span className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
         </button>
       </div>
@@ -131,8 +134,16 @@ const ReceptionDashboard = () => {
               onClick={handleCodeCheck}
               className="relative flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group"
             >
-              <FiSearch size={20} />
-              <span className="relative z-10">Check Code</span>
+              <span className="text-white relative z-10">
+                <FiSearch size={20} />
+              </span>
+              <span className="relative z-10 flex items-center justify-center gap-3">
+                Check Code
+                <FiArrowRight
+                  size={20}
+                  className="group-hover:translate-x-1 transition-transform duration-300"
+                />
+              </span>
               <span className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
             </button>
           </div>
@@ -229,10 +240,10 @@ const ReceptionDashboard = () => {
                       </p>
                       <div>
                         <p className="font-semibold text-sm text-gray-800">
-                          <span>Time In:</span>{" "}{visit.timeIn || "N/A"}
+                          <span>Time In:</span> {visit.timeIn || "N/A"}
                         </p>
                         <p className="font-semibold text-sm text-gray-800">
-                          <span>Time Out:</span>{" "}{visit.timeOut || "N/A"}
+                          <span>Time Out:</span> {visit.timeOut || "N/A"}
                         </p>
                       </div>
                     </div>
