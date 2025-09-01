@@ -1,88 +1,68 @@
 import React from "react";
-import { HiOutlineChevronDown } from "react-icons/hi";
 
-const InputField = ({
-  name,
-  label,
-  icon,
-  placeholder,
-  type,
-  handleChange,
-  value,
-  error,
-  dropdown,
-  setDropdown,
-  content,
-  handleSelected,
-  isDropDown,
-  maxLength,
+const InputField = ({ 
+  name, 
+  label, 
+  icon, 
+  placeholder, 
+  type, 
+  handleChange, 
+  value, 
+  error, 
+  maxLength, 
   inputMode,
-  isOptional,
+  isOptional = false 
 }) => {
+  const isValid = value && !error;
+  const hasError = error && error.length > 0;
+
   return (
     <div className="flex flex-col gap-2">
-      <label className="font-medium text-[#2E2E2E]">
-        {label} {!isOptional && <span className="text-red-500">*</span>}
-      </label>
-      <div className="flex focus-within:ring-2 focus-within:ring-[#F97316] transition rounded-xl">
-        <div
-          className={`border ${
-            error ? "border-red-500" : "border-gray-300"
-          } border-r-0 rounded-l-xl w-14 flex items-center justify-center bg-[#FFF4ED]`}
-        >
-          {icon}
-        </div>
-        {!isDropDown ? (
-          <input
-            name={name}
-            type={type}
-            maxLength={maxLength}
-            inputMode={inputMode}
-            onChange={handleChange}
-            value={value}
-            placeholder={placeholder}
-            className={`border ${
-              error ? "border-red-500" : "border-gray-300"
-            } rounded-r-xl p-4 h-13 w-full focus:outline-none`}
-          />
-        ) : (
-          <div
-            onClick={() => setDropdown(!dropdown)}
-            className="relative w-full cursor-pointer"
-          >
-            <input
-              name={name}
-              type={type}
-              readOnly
-              value={value}
-              placeholder={placeholder}
-              className={`border ${
-                error ? "border-red-500" : "border-gray-300"
-              } rounded-r-xl p-4 h-13 w-full focus:outline-none`}
-            />
-            <HiOutlineChevronDown
-              className={`absolute top-1/2 right-4 transform -translate-y-1/2 transition-transform ${
-                dropdown ? "rotate-180" : ""
-              }`}
-              size={20}
-            />
-            {dropdown && (
-              <div className="absolute top-full w-full bg-white border border-gray-300 rounded-xl shadow-md z-50 max-h-56 overflow-y-auto">
-                {content.map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelected(item)}
-                    className="p-3 pl-6 hover:bg-[#FFF4ED] hover:text-[#F97316] cursor-pointer"
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+      <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+        <span className="text-orange-500 flex-shrink-0">{icon}</span>
+        <span>{label}</span>
+        {isOptional && (
+          <span className="text-xs text-slate-400 font-normal bg-slate-100 px-2 py-0.5 rounded-full">
+            Optional
+          </span>
         )}
+      </label>
+      
+      <div className="relative group">
+        <input
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          onChange={handleChange}
+          value={value}
+          maxLength={maxLength}
+          inputMode={inputMode}
+          className={`w-full h-15 px-4 py-3 bg-slate-50/50 border-2 rounded-xl font-medium text-slate-700 placeholder:text-slate-400 focus:outline-none transition-all duration-300 pr-12 ${
+            hasError 
+              ? "border-red-400 bg-red-50/50 focus:border-red-500 focus:bg-red-50" 
+              : isValid
+              ? "border-green-400 bg-green-50/30 focus:border-green-500 focus:bg-green-50"
+              : "border-slate-200 hover:border-slate-300 focus:border-orange-400 focus:bg-white group-hover:border-orange-300"
+          }`}
+        />
+        
+   
       </div>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      
+      {hasError && (
+        <div className="flex items-start gap-2 mt-1">
+          <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></div>
+          <span className="text-red-600 text-sm font-medium leading-relaxed">
+            {error}
+          </span>
+        </div>
+      )}
+      
+      {name === "phoneNumber" && (
+        <div className="text-xs text-slate-400 text-right">
+          {value.length}/11 digits
+        </div>
+      )}
     </div>
   );
 };

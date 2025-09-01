@@ -11,7 +11,7 @@ const MainLayout = () => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 800); 
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [location]);
@@ -40,8 +40,17 @@ const MainLayout = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      <section className="relative bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100">
+        { location.pathname !== '/' && <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full mix-blend-multiply filter opacity-70 animate-pulse"></div>
+          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-gradient-to-br from-amber-400/20 to-orange-400/20 rounded-full mix-blend-multiply filter opacity-70 animate-pulse delay-1000"></div>
 
-      <Outlet />
+          <div className="absolute top-20 right-20 w-20 h-20 border border-orange-200/40 rounded-lg rotate-12 animate-bounce"></div>
+          <div className="absolute bottom-20 left-20 w-16 h-16 bg-gradient-to-br from-orange-200/30 to-amber-200/30 rounded-full animate-bounce delay-500"></div>
+          <div className="absolute top-1/2 right-10 w-12 h-12 bg-gradient-to-br from-orange-200/40 to-red-200/40 transform rotate-45 animate-pulse"></div>
+        </div>}
+        <Outlet />
+      </section>
     </div>
   );
 };

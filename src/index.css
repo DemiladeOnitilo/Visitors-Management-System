@@ -16,3 +16,19 @@ h1, h2, h3 {
   font-style: normal;
 }
 
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 10px;
+}

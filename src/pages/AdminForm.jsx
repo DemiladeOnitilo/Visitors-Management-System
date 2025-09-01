@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { FiMail, FiPhone, FiUser, FiArrowLeft, FiCalendar, FiClock } from "react-icons/fi";
-import { FaQuestion } from "react-icons/fa";
+import {
+  FiMail,
+  FiPhone,
+  FiUser,
+  FiArrowLeft,
+  FiCalendar,
+  FiClock,
+  FiShield,
+  FiArrowRight,
+} from "react-icons/fi";
+import { FaQuestion, FaShieldAlt } from "react-icons/fa";
 import InputField from "../components/InputField";
 import SuccessModal from "../components/SuccessModal";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { purposeList } from "../components/purposeList";
 
 const AdminForm = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +22,8 @@ const AdminForm = () => {
     email: "",
     purpose: "",
     date: "",
-    time: "",
+    timeIn: "",
+    timeOut: "",
     code: "",
   });
 
@@ -24,10 +33,10 @@ const AdminForm = () => {
     email: "",
     purpose: "",
     date: "",
-    time: "",
+    timeIn: "",
+    timeOut: "",
   });
 
-  const [purpose, setPurpose] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [admin, setAdmin] = useState(null);
   const navigate = useNavigate();
@@ -50,7 +59,8 @@ const AdminForm = () => {
       email: "",
       purpose: "",
       date: "",
-      time: "",
+      timeIn: "",
+      timeOut: "",
       code: "",
     });
   };
@@ -83,7 +93,6 @@ const AdminForm = () => {
 
     setFormData((prev) => ({ ...prev, [name]: trimmedValue }));
 
-    // Simple validation
     if (name === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (emailRegex.test(trimmedValue)) {
@@ -105,7 +114,10 @@ const AdminForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\d{10,15}$/;
 
-    if (!formData.personName || formData.personName.trim().split(/\s+/).length < 2) {
+    if (
+      !formData.personName ||
+      formData.personName.trim().split(/\s+/).length < 2
+    ) {
       newErrors.personName = "Please input the visitor's full name";
     }
 
@@ -127,8 +139,12 @@ const AdminForm = () => {
       newErrors.date = "Please select a date";
     }
 
-    if (!formData.time) {
-      newErrors.time = "Please select a time";
+    if (!formData.timeIn) {
+      newErrors.timeIn = "Please select a time of arrival";
+    }
+
+    if (!formData.timeOut) {
+      newErrors.timeOut = "Please select a time of departure";
     }
 
     setErrors(newErrors);
@@ -158,46 +174,56 @@ const AdminForm = () => {
     setIsOpen(true);
   };
 
-  const handleSelectedPurpose = (selectedPurpose) => {
-    setFormData((prev) => ({ ...prev, purpose: selectedPurpose }));
-    setPurpose(false);
-  };
-
   return (
-    <div className="relative flex justify-center items-center min-h-screen">
+    <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative">
       <button
         onClick={() => navigate("/admin")}
-        className="absolute top-6 left-6 flex items-center gap-2 text-[#2E2E2E] hover:text-[#F97316] font-semibold transition-colors duration-300 cursor-pointer"
+        className="absolute top-6 left-6 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
       >
         <FiArrowLeft size={20} />
-        Back
+        <span className="hidden md:block">Back to Login</span>
       </button>
 
-      <div className="bg-white shadow-xl md:rounded-3xl max-w-xl w-full md:px-8 px-2 py-16">
-        <div className="flex flex-col items-center gap-5 text-center ">
-          <h1 className="text-4xl font-bold text-[#2E2E2E]">
+      <main className="w-full max-w-2xl flex flex-col items-center gap-10 relative">
+        <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 mt-16 md:mt-0">
+          <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-3 rounded-xl shadow-lg">
+            <FaShieldAlt size={25} />
+          </div>
+          <span className="font-semibold text-xl">Visitor Management</span>
+        </div>
+
+        <div className="flex flex-col items-center text-center gap-4">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
             Welcome,{" "}
-            <span className="bg-gradient-to-r from-[#F97316] to-[#FFCBA4] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent">
               {admin?.name || "Admin"}
             </span>
           </h1>
-          <p className="text-xl text-gray-600 ">Set up a new visit</p>
-          <div className="h-[2px] w-16 mx-auto bg-[#F97316] rounded-full"></div>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Create a new visit entry with visitor details and schedule
+            information
+          </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 p-6 font-semibold"
+          className="flex flex-col gap-5 font-semibold bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20"
         >
-          <small className="text-gray-400">
-            Fields marked with a{" "}
-            <span className="text-red-400">*</span> are required
-          </small>
+          <p className="text-center text-sm mt-2 text-gray-500">
+            Host:{" "}
+            <span className="text-[#F97316] font-semibold">
+              {admin?.name || "Admin"}
+            </span>{" "}
+            • Department:{" "}
+            <span className="text-[#F97316] font-semibold">
+              {admin?.department || "Admin Department"}
+            </span>
+          </p>
 
           <InputField
             name="personName"
-            label="Full Name"
-            icon={<FiUser size={24} />}
+            label="Visitor Full Name"
+            icon={<FiUser size={15} />}
             placeholder="Tom Dinkle"
             type="text"
             handleChange={handleChange}
@@ -208,7 +234,7 @@ const AdminForm = () => {
           <InputField
             name="phoneNumber"
             label="Phone Number"
-            icon={<FiPhone size={24} />}
+            icon={<FiPhone size={15} />}
             maxLength={11}
             inputMode="numeric"
             type="tel"
@@ -220,8 +246,8 @@ const AdminForm = () => {
 
           <InputField
             name="email"
-            label="Email"
-            icon={<FiMail size={24} />}
+            label="Email Address"
+            icon={<FiMail size={15} />}
             placeholder="tomdinkle@gmail.com"
             type="email"
             handleChange={handleChange}
@@ -234,43 +260,77 @@ const AdminForm = () => {
             name="purpose"
             label="Purpose of Visit"
             type="text"
-            icon={<FaQuestion size={24} />}
+            icon={<FaQuestion size={15} />}
             placeholder="Why are you visiting"
             handleChange={handleChange}
             value={formData.purpose}
             error={errors.purpose}
-            dropdown={purpose}
-            setDropdown={setPurpose}
-            content={purposeList}
-            handleSelected={handleSelectedPurpose}
-            isDropDown={true}
           />
 
           <InputField
             name="date"
-            label="Date"
-            icon={<FiCalendar size={24} />}
+            label="Visit Date"
+            icon={<FiCalendar size={18} />}
             type="date"
             handleChange={handleChange}
             value={formData.date}
             error={errors.date}
           />
 
-          <InputField
-            name="time"
-            label="Time"
-            icon={<FiClock size={24} />}
-            type="time"
-            handleChange={handleChange}
-            value={formData.time}
-            error={errors.time}
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InputField
+              name="timeIn"
+              label="Time In"
+              icon={<FiClock size={18} />}
+              type="time"
+              handleChange={handleChange}
+              value={formData.timeIn}
+              error={errors.timeIn}
+            />
 
-          <button className="w-full p-4 bg-[#F97316] text-white rounded-xl font-bold cursor-pointer hover:bg-[#3A3D46] transition-colors duration-300 ">
-            Submit
+            <InputField
+              name="timeOut"
+              label="Time Out"
+              icon={<FiClock size={18} />}
+              type="time"
+              handleChange={handleChange}
+              value={formData.timeOut}
+              error={errors.timeOut}
+            />
+          </div>
+          <button className="w-full mt-8 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg overflow-hidden group cursor-pointer relative shadow-lg hover:shadow-xl transition-all duration-300">
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              Create Visit
+              <FiArrowRight
+                size={20}
+                className="group-hover:translate-x-1 transition-transform duration-300"
+              />
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-600 to-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
+
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
           </button>
+
+          <div className="mt-6 p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
+            <div className="flex items-start gap-3">
+              <FiShield
+                size={18}
+                className="text-orange-500 mt-0.5 flex-shrink-0"
+              />
+              <div>
+                <h4 className="text-sm font-semibold text-slate-700 mb-1">
+                  Visit Security
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  All visitor entries are logged and monitored for security
+                  purposes. A unique access code will be generated for each
+                  visit.
+                </p>
+              </div>
+            </div>
+          </div>
         </form>
-      </div>
+      </main>
 
       {isOpen && (
         <SuccessModal

@@ -1,50 +1,65 @@
 import React from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import { FiCheck } from "react-icons/fi";
 
 const StepIndicator = ({ activeStep, isOpen }) => {
-  return (
-    <div className="flex justify-center items-center gap-2">
-      {[1, 2].map((step) => {
-        const isDone = activeStep > step || isOpen;
-        const isActive = activeStep === step && !isDone;
+  const steps = [
+    { number: 1, title: "Host Info" },
+    { number: 2, title: "Your Info" }
+  ];
 
-        return (
-          <div key={step} className="flex items-center gap-1">
-            <div
-              className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-bold transition-colors duration-300
-                ${
-                  isDone
-                    ? "border-green-400"
-                    : isActive
-                    ? "border-[#F97316] shadow-sm"
-                    : "border-gray-300 text-gray-300"
-                }`}
-            >
-              {isDone ? (
-                <FaCheckCircle className="text-green-400 w-6 h-6" />
-              ) : (
-                <span
-                  className={`${isActive ? "text-[#F97316]" : "text-gray-400"}`}
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-center">
+        {steps.map((step, index) => {
+          const isDone = activeStep > step.number || isOpen;
+          const isActive = activeStep === step.number && !isDone;
+
+          return (
+            <div key={step.number} className="flex items-center">
+              <div className="flex flex-col items-center">
+                <div
+                  className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-semibold transition-all duration-300 ${
+                    isDone
+                      ? "border-green-500 bg-green-500 text-white"
+                      : isActive
+                      ? "border-orange-500 bg-orange-500 text-white"
+                      : "border-slate-300 bg-white text-slate-400"
+                  }`}
                 >
-                  0{step}
-                </span>
+                  {isDone ? (
+                    <FiCheck size={16} />
+                  ) : (
+                    <span className="text-sm">{step.number}</span>
+                  )}
+                </div>
+                
+                <div className={`mt-2 text-sm font-medium transition-colors duration-300 ${
+                  isActive 
+                    ? 'text-orange-600' 
+                    : isDone 
+                    ? 'text-green-600' 
+                    : 'text-slate-400'
+                }`}>
+                  {step.title}
+                </div>
+              </div>
+
+              {index < steps.length - 1 && (
+                <div className={`w-16 h-0.5 mx-4 mt-[-24px] transition-colors duration-300 ${
+                  activeStep > step.number || isOpen ? 'bg-green-500' : 'bg-slate-300'
+                }`} />
               )}
             </div>
+          );
+        })}
+      </div>
 
-            {step !== 2 && (
-              <span
-                className={`h-[2px] w-8 transition-colors duration-300 ${
-                  isDone
-                    ? "bg-green-400"
-                    : isActive
-                    ? "bg-[#F97316]"
-                    : "bg-gray-300"
-                }`}
-              ></span>
-            )}
-          </div>
-        );
-      })}
+      <div className="text-center mt-6">
+        <span className="text-sm text-slate-500">
+          Step {activeStep} of {steps.length}
+          {isOpen && " - Complete!"}
+        </span>
+      </div>
     </div>
   );
 };
