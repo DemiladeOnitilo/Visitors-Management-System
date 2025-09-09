@@ -149,7 +149,7 @@ const ReceptionDashboard = () => {
           </div>
 
           <div className="flex gap-3 flex-wrap justify-center lg:justify-end">
-            {["All", "Pending", "Checked In", "Cancelled"].map((status) => (
+            {["All", "Pending", "Checked In", "Declined"].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
@@ -198,7 +198,7 @@ const ReceptionDashboard = () => {
                   className={`px-4 py-2 rounded-2xl text-sm font-bold shadow-md ${
                     visit.status === "Checked In"
                       ? "bg-gradient-to-r from-green-400 to-green-600 text-white"
-                      : visit.status === "Cancelled"
+                      : visit.status === "Declined"
                       ? "bg-gradient-to-r from-red-400 to-red-600 text-white"
                       : "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white"
                   }`}
@@ -263,10 +263,10 @@ const ReceptionDashboard = () => {
               <div className="grid grid-cols-1 gap-3">
                 <div className="grid grid-cols-2 gap-3">
                   <button
-                    onClick={() => updateVisitStatus(visit.code, "Cancelled")}
+                    onClick={() => updateVisitStatus(visit.code, "Declined")}
                     className="relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group"
                   >
-                    <span className="relative z-10">Cancel</span>
+                    <span className="relative z-10">Decline</span>
                   </button>
                   <button
                     onClick={() => updateVisitStatus(visit.code, "Checked In")}
@@ -292,6 +292,8 @@ const ReceptionDashboard = () => {
         selectedVisit={selectedVisit}
         visitFoundModal={visitFoundModal}
         setVisitFoundModal={setVisitFoundModal}
+        updateVisitStatus={updateVisitStatus}   
+        handleDeleteClick={handleDeleteClick}
       />
 
       <DeleteModal

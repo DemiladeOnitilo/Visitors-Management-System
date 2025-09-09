@@ -14,6 +14,7 @@ const DeleteModal = ({confirmDelete, confirmDeleteModal, visitToDelete, cancelDe
           justifyContent: "center",
           backgroundColor: "rgba(0,0,0,0.7)",
           backdropFilter: "blur(8px)",
+          zIndex: 99999,
         },
         content: {
           position: "static",

@@ -14,6 +14,8 @@ const SearchModal = ({
   visitFoundModal,
   setVisitFoundModal,
   selectedVisit,
+  updateVisitStatus,
+  handleDeleteClick,
 }) => {
   return (
     <Modal
@@ -21,6 +23,7 @@ const SearchModal = ({
       onRequestClose={() => setVisitFoundModal(false)}
       style={{
         overlay: {
+          zIndex: 1000, 
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -81,7 +84,7 @@ const SearchModal = ({
                 className={`inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold shadow-lg ${
                   selectedVisit?.status === "Checked In"
                     ? "bg-gradient-to-r from-green-400 to-green-600 text-white"
-                    : selectedVisit?.status === "Cancelled"
+                    : selectedVisit?.status === "Declined"
                     ? "bg-gradient-to-r from-red-400 to-red-600 text-white"
                     : "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white"
                 }`}
@@ -89,9 +92,29 @@ const SearchModal = ({
                 <FiCheckCircle size={16} />
                 {selectedVisit?.status || "Pending"}
               </span>
+
+                <div className="mt-6">
+                  <button 
+                          onClick={() => { updateVisitStatus(selectedVisit.code, "Declined")
+                          selectedVisit.status = "Declined";}}
+                          className="relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group mr-2">
+                          Decline</button>
+
+                  <button 
+                          onClick={() => { updateVisitStatus(selectedVisit.code, "Checked In")
+                          selectedVisit.status = "Checked In";}}
+                          className="relative bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group mr-2">
+                          Check In</button>
+
+                  <button 
+                          onClick={() => handleDeleteClick(selectedVisit)}
+                          className="relative bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group">
+                          Delete</button>
+                </div>
+
             </div>
           </div>
-
+                
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200">
               <div className="flex items-center gap-3 mb-3">
