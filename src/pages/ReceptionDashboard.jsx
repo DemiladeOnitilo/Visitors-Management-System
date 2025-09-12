@@ -8,13 +8,12 @@ import {
   FiCalendar,
   FiClock,
   FiArrowRight,
+  FiRefreshCw,
 } from "react-icons/fi";
 import { FaUserTie } from "react-icons/fa";
-import Modal from "react-modal";
 import DeleteModal from "../components/DeleteModal";
 import SearchModal from "../components/SearchModal";
-
-Modal.setAppElement("#root");
+import RescheduleModal from "../components/RescheduleModal";
 
 const ReceptionDashboard = () => {
   const [receptionist, setReceptionist] = useState(null);
@@ -25,6 +24,8 @@ const ReceptionDashboard = () => {
   const [visitToDelete, setVisitToDelete] = useState(null);
   const [visitFoundModal, setVisitFoundModal] = useState(false);
   const [selectedVisit, setSelectedVisit] = useState(null);
+  const [rescheduleModal, setRescheduleModal] = useState(false);
+  const [visitToReschedule, setVisitToReschedule] = useState(null);
 
   const navigate = useNavigate();
 
@@ -66,6 +67,22 @@ const ReceptionDashboard = () => {
     setConfirmDeleteModal(true);
   };
 
+  const handleRescheduleClick = (visit) => {
+    setVisitToReschedule(visit);
+    setRescheduleModal(true);
+  };
+
+  const handleReschedule = (rescheduledVisit) => {
+    const updatedVisits = visits.map((visit) =>
+      visit.code === rescheduledVisit.code ? rescheduledVisit : visit
+    );
+    localStorage.setItem("visits", JSON.stringify(updatedVisits));
+    setVisits(updatedVisits);
+    toast.success("Visit rescheduled successfully!");
+    setVisitToReschedule(null);
+    setRescheduleModal(false);
+  };
+
   const confirmDelete = () => {
     const updated = visits.filter((v) => v.code !== visitToDelete.code);
     localStorage.setItem("visits", JSON.stringify(updated));
@@ -88,6 +105,7 @@ const ReceptionDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 px-6 py-10 relative">
+      {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
         <div className="flex items-center gap-4">
           <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-3 rounded-2xl shadow-lg">
@@ -118,6 +136,7 @@ const ReceptionDashboard = () => {
         </button>
       </div>
 
+      {/* Search and Filter Section */}
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 mb-10">
         <div className="flex flex-col lg:flex-row gap-6 items-stretch lg:items-center">
           <div className="flex flex-col sm:flex-row gap-4 flex-1">
@@ -149,7 +168,7 @@ const ReceptionDashboard = () => {
           </div>
 
           <div className="flex gap-3 flex-wrap justify-center lg:justify-end">
-            {["All", "Pending", "Checked In", "Declined"].map((status) => (
+            {["All", "Pending", "Checked In", "Declined", "Rescheduled"].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
@@ -166,6 +185,7 @@ const ReceptionDashboard = () => {
         </div>
       </div>
 
+      {/* Visits Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {filteredVisits.length === 0 ? (
           <div className="col-span-full text-center py-20">
@@ -187,6 +207,7 @@ const ReceptionDashboard = () => {
               key={visit.code}
               className="bg-white/90 backdrop-blur-sm border-2 border-white/20 rounded-3xl shadow-xl p-8 flex flex-col justify-between gap-6 hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-300 group"
             >
+              {/* Visit Header */}
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors duration-300">
@@ -200,6 +221,8 @@ const ReceptionDashboard = () => {
                       ? "bg-gradient-to-r from-green-400 to-green-600 text-white"
                       : visit.status === "Declined"
                       ? "bg-gradient-to-r from-red-400 to-red-600 text-white"
+                      : visit.status === "Rescheduled"
+                      ? "bg-gradient-to-r from-blue-400 to-purple-600 text-white"
                       : "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white"
                   }`}
                 >
@@ -207,6 +230,7 @@ const ReceptionDashboard = () => {
                 </span>
               </div>
 
+              {/* Visit Details */}
               <div className="bg-gray-50/80 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center gap-3">
                   <FaUserTie className="text-orange-500" size={16} />
@@ -230,6 +254,11 @@ const ReceptionDashboard = () => {
                       <p className="font-semibold text-sm text-gray-800">
                         {visit.date || "N/A"}
                       </p>
+                      {visit.originalDate && visit.originalDate !== visit.date && (
+                        <p className="text-xs text-gray-400 line-through">
+                          Was: {visit.originalDate}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -245,10 +274,26 @@ const ReceptionDashboard = () => {
                         <p className="font-semibold text-sm text-gray-800">
                           <span>Time Out:</span> {visit.timeOut || "N/A"}
                         </p>
+                        {visit.originalTimeIn && visit.originalTimeIn !== visit.timeIn && (
+                          <p className="text-xs text-gray-400 line-through">
+                            Was: {visit.originalTimeIn}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {visit.rescheduleReason && (
+                  <div className="pt-2 border-t border-gray-200">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">
+                      Reschedule Reason
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      {visit.rescheduleReason}
+                    </p>
+                  </div>
+                )}
 
                 <div className="pt-2 border-t border-gray-200">
                   <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -260,6 +305,7 @@ const ReceptionDashboard = () => {
                 </div>
               </div>
 
+              {/* Action Buttons */}
               <div className="grid grid-cols-1 gap-3">
                 <div className="grid grid-cols-2 gap-3">
                   <button
@@ -275,25 +321,36 @@ const ReceptionDashboard = () => {
                     <span className="relative z-10">Check In</span>
                   </button>
                 </div>
-                <button
-                  onClick={() => handleDeleteClick(visit)}
-                  className="relative w-full bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group"
-                >
-                  <span className="relative z-10">Delete</span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-                </button>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => handleRescheduleClick(visit)}
+                    className="relative bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group flex items-center justify-center gap-2"
+                  >
+                    <FiRefreshCw size={16} className="relative z-10" />
+                    <span className="relative z-10">Reschedule</span>
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(visit)}
+                    className="relative bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-3 rounded-2xl cursor-pointer transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-[1.02] overflow-hidden group"
+                  >
+                    <span className="relative z-10">Delete</span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                  </button>
+                </div>
               </div>
             </div>
           ))
         )}
       </div>
 
+      {/* Modals */}
       <SearchModal
         selectedVisit={selectedVisit}
         visitFoundModal={visitFoundModal}
         setVisitFoundModal={setVisitFoundModal}
         updateVisitStatus={updateVisitStatus}   
         handleDeleteClick={handleDeleteClick}
+        handleRescheduleClick={handleRescheduleClick}
       />
 
       <DeleteModal
@@ -301,6 +358,13 @@ const ReceptionDashboard = () => {
         confirmDeleteModal={confirmDeleteModal}
         visitToDelete={visitToDelete}
         cancelDelete={cancelDelete}
+      />
+
+      <RescheduleModal
+        isOpen={rescheduleModal}
+        onClose={() => setRescheduleModal(false)}
+        visit={visitToReschedule}
+        onReschedule={handleReschedule}
       />
 
       <ToastContainer />
