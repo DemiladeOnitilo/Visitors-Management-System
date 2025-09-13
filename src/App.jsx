@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider
+} from 'react-router-dom'
 import AdminForm from "./pages/AdminForm";
 import VisitorPage from "./pages/VisitorPage";
 import LandingPage from "./pages/LandingPage";
@@ -12,9 +17,9 @@ import AdminSignup from "./pages/AdminSignup";
 import ReceptionSignup from "./pages/ReceptionSignup";
 
 const App = () => {
-  return (
-    <Router>
-      <Routes>
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route>
         <Route element={<MainLayout />}>
           <Route path="/" element={<LandingPage />} />
           <Route path="/visitor" element={<VisitorPage />} />
@@ -26,9 +31,16 @@ const App = () => {
           <Route path="/admin/form" element={<AdminForm />} />
           <Route path="/admin/reception/dashboard" element={<ReceptionDashboard />} />
         </Route>
-      </Routes>
-    </Router>
-  );
-};
+      </Route>
+      
+    )
+  )
+
+  return(
+    <div className='w-screen'>
+      <RouterProvider router={router} />
+    </div>
+  )  
+}
 
 export default App;
