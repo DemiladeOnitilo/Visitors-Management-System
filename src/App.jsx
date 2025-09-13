@@ -37,7 +37,7 @@ const App = () => {
   )
 
   return(
-    <div className='w-screen'>
+    <div>
       <RouterProvider router={router} />
     </div>
   )  

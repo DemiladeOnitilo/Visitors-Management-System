@@ -1,156 +1,92 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FiArrowLeft,
-  FiLock,
-  FiShield,
-  FiHeadphones,
-  FiTrendingUp,
-  FiArrowRight,
-} from "react-icons/fi";
+import { FiUsers, FiMapPin, FiLogOut } from "react-icons/fi";
+import TopBadge from "../components/TopBadge";
+import MainHeader from "../components/MainHeader";
 
 const AdminSelectionPage = () => {
-  const [selectedRole, setSelectedRole] = useState(null);
   const navigate = useNavigate();
+  const [admin, setAdmin] = useState(null);
 
-  const roles = [
-    {
-      id: "admin",
-      title: "Administrative Panel",
-      subtitle: "Full System Access",
-      description:
-        "Book visits and manage system configuration with administrative privileges",
-      icon: FiShield,
-      color: "from-orange-500 to-orange-600",
-      hoverColor: "from-orange-600 to-orange-700",
-      path: "/admin/login",
-      features: [
-        "Book Visits",
-        "User Management",
-        "System Analytics",
-        "Report Generation",
-      ],
-    },
-    {
-      id: "reception",
-      title: "Reception Desk",
-      subtitle: "Visit Management",
-      description:
-        "Accept, check, cancel and manage visitor operations from the front desk",
-      icon: FiHeadphones,
-      color: "from-orange-400 to-orange-500",
-      hoverColor: "from-orange-500 to-orange-600",
-      path: "/admin/reception/login",
-      features: [
-        "Accept Visits",
-        "Check Visit Status",
-        "Cancel Visits",
-        "Delete Visit Records",
-      ],
-    },
-  ];
+  useEffect(() => {
+    const storedAdmin = localStorage.getItem("admin");
+    if (storedAdmin) {
+      setAdmin(JSON.parse(storedAdmin));
+    } else {
+      navigate("/admin/login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+    navigate("/admin/login");
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <button
-        onClick={() => navigate("/")}
-        className="absolute top-6 left-6 z-100 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
-      >
-        <FiArrowLeft size={20} />
-        <span className="hidden md:block">Back Home</span>
-      </button>
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 md:py-10 relative">
+      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
 
-      <main className="w-full max-w-6xl flex flex-col items-center gap-10 relative z-10">
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 mt-16 md:mt-0">
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-3 rounded-xl shadow-lg">
-            <FiLock size={25} />
-          </div>
-          <span className="font-semibold text-xl">VMS Access Portal</span>
+      <main className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 pt-12 md:pt-0 relative z-10 flex-grow">
+        
+        {/* Upper Functional Action Bar */}
+        <div className="w-full flex justify-end px-2">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl text-sm font-bold border border-white/50 shadow-md text-slate-700 hover:border-red-200 transition-all active:scale-95 cursor-pointer"
+          >
+            <FiLogOut size={16} className="text-red-500" />
+            <span>Log Out</span>
+          </button>
         </div>
 
-        <div className="flex flex-col items-center text-center gap-4">
-          <h1 className="text-5xl md:text-6xl font-bold">
-            Choose Your{" "}
-            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-              Access Level
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Select your role to access the visitor management system with
-            appropriate permissions and tools
-          </p>
-        </div>
+        <TopBadge text="Control Panel" icon={<FiUsers size={14} />} />
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-12">
-          {roles.map((role, index) => (
-            <div
-              key={index}
-              className={`group relative bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl cursor-pointer ${
-                selectedRole === role.id && "ring-2 ring-orange-500"
-              }`}
-              onClick={() => setSelectedRole(role.id)}
-            >
-              <div className="relative mb-6">
-                <div
-                  className={`inline-flex p-4 bg-gradient-to-br ${role.color} rounded-2xl shadow-lg`}
-                >
-                  <role.icon size={32} className="text-white" />
-                </div>
+        <MainHeader
+          text="Welcome Back,"
+          coloredText={admin?.name || "Admin"}
+          subtext="Select an operational pathway below to handle expected building visitors or manage room reservation slots across the corporate workspace layout."
+        />
 
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-orange-500 rounded-full border-4 border-white shadow-sm">
-                  <div className="w-full h-full bg-orange-400 rounded-full animate-ping"></div>
-                </div>
-              </div>
-              <div className="relative">
-                <h3 className="text-2xl font-bold text-slate-800 mb-2">
-                  {role.title}
-                </h3>
-
-                <div className="flex items-center gap-2 mb-4">
-                  <span
-                    className={`px-3 py-1 bg-gradient-to-r ${role.color} text-white text-sm font-medium rounded-full`}
-                  >
-                    {role.subtitle}
-                  </span>
-                  <FiTrendingUp size={16} className="text-orange-500" />
-                </div>
-
-                <p className="text-slate-600 mb-6 leading-relaxed">
-                  {role.description}
-                </p>
-
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  {role.features.map((feature, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-full shadow-lg border border-gray-600"
-                    >
-                      <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
-                      <span className="text-sm font-semibold text-slate-700">
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(role.path);
-                  }}
-                  className={`w-full py-4 bg-gradient-to-r ${role.color} text-white font-semibold rounded-xl shadow-lg hover:shadow-xl group-hover:scale-[1.02] transition-all duration-300 relative overflow-hidden cursor-pointer`}
-                >
-                  <span className="relative flex items-center justify-center gap-2">
-                    Access {role.title}
-                    <FiArrowRight
-                      size={18}
-                      className=" group-hover:translate-x-1 transition-transform duration-300"
-                    />
-                  </span>
-                </button>
-              </div>
+        {/* Selection Cards Split Matrix */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mt-2">
+          
+          {/* Card Component 1: Visitor Forms Allocation */}
+          <div
+            onClick={() => navigate("/admin/form")}
+            className="group bg-white/90 backdrop-blur-sm hover:bg-orange-50/50 cursor-pointer rounded-3xl p-8 flex flex-col gap-4 shadow-xl border border-white/20 hover:border-orange-200 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
+          >
+            <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-4 rounded-2xl w-fit shadow-lg">
+              <FiUsers size={28} />
             </div>
-          ))}
+            <div>
+              <h3 className="text-2xl font-bold text-slate-800 group-hover:text-orange-600 transition-colors duration-300 mb-1">
+                Visitor Registration
+              </h3>
+              <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                Log expected guests, check appointments data entries, and create secure reception access token keys.
+              </p>
+            </div>
+          </div>
+
+          {/* Card Component 2: Meeting Room Timeline Scheduler */}
+          <div
+            onClick={() => navigate("/meeting-room")}
+            className="group bg-white/90 backdrop-blur-sm hover:bg-orange-50/50 cursor-pointer rounded-3xl p-8 flex flex-col gap-4 shadow-xl border border-white/20 hover:border-orange-200 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
+          >
+            <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-4 rounded-2xl w-fit shadow-lg">
+              <FiMapPin size={28} />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-slate-800 group-hover:text-orange-600 transition-colors duration-300 mb-1">
+                Meeting Rooms
+              </h3>
+              <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                Reserve building boardrooms, confirm calendar timeline availability matrix windows, and prevent multi-party block conflicts.
+              </p>
+            </div>
+          </div>
+
         </div>
       </main>
     </div>

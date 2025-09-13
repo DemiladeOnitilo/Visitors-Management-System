@@ -33,7 +33,7 @@ const StepIndicator = ({ activeStep, isOpen }) => {
                   )}
                 </div>
                 
-                <div className={`mt-2 text-sm font-medium transition-colors duration-300 ${
+                <div className={`mt-2 text-xs md:text-sm font-medium transition-colors duration-300 ${
                   isActive 
                     ? 'text-orange-600' 
                     : isDone 
@@ -45,7 +45,7 @@ const StepIndicator = ({ activeStep, isOpen }) => {
               </div>
 
               {index < steps.length - 1 && (
-                <div className={`w-16 h-0.5 mx-4 mt-[-24px] transition-colors duration-300 ${
+                <div className={`w-16 h-0.5 mt-[-24px] transition-colors duration-300 ${
                   activeStep > step.number || isOpen ? 'bg-green-500' : 'bg-slate-300'
                 }`} />
               )}
@@ -54,12 +54,7 @@ const StepIndicator = ({ activeStep, isOpen }) => {
         })}
       </div>
 
-      <div className="text-center mt-6">
-        <span className="text-sm text-slate-500">
-          Step {activeStep} of {steps.length}
-          {isOpen && " - Complete!"}
-        </span>
-      </div>
+   
     </div>
   );
 };

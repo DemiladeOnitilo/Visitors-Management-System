@@ -1,8 +1,8 @@
 import React from "react";
 import Modal from "react-modal";
-import { FiTrash2, FiAlertTriangle, FiX, FiUser } from "react-icons/fi";
+import { FiX as IconX, FiAlertTriangle as IconAlert, FiTrash2 as IconTrash, FiUser as IconUser } from "react-icons/fi";
 
-const DeleteModal = ({confirmDelete, confirmDeleteModal, visitToDelete, cancelDelete}) => {
+const DeleteModal = ({ confirmDelete, confirmDeleteModal, visitToDelete, cancelDelete }) => {
   return (
     <Modal
       isOpen={confirmDeleteModal}
@@ -12,121 +12,72 @@ const DeleteModal = ({confirmDelete, confirmDeleteModal, visitToDelete, cancelDe
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "rgba(0,0,0,0.7)",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
           backdropFilter: "blur(8px)",
-          zIndex: 99999,
+          zIndex: 99999, 
         },
         content: {
           position: "static",
           inset: "unset",
+          margin: "auto",
           border: "none",
-          background: "transparent",
-          borderRadius: "2rem",
-          maxWidth: "500px",
-          width: "90%",
+          background: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(20px)",
+          borderRadius: "24px",
+          maxWidth: "min(460px, 92vw)",
+          maxHeight: "min(92vh, 100vh)",
+          width: "100%",
           padding: "0",
-          overflow: "visible",
+          boxShadow: "0 25px 50px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.2)",
+          overflow: "hidden",
         },
       }}
     >
-      <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
-        <div className="bg-gradient-to-r from-red-500 to-red-600 px-8 py-6 relative">
-          <button
-            onClick={cancelDelete}
-            className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/20 p-2 rounded-full transition-all duration-300"
-          >
-            <FiX size={18} />
-          </button>
-          <div className="flex items-center gap-4 text-white">
-            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl">
-              <FiAlertTriangle size={28} />
+      <div className="flex flex-col max-h-[92vh] h-full">
+        <div className="bg-gradient-to-r from-red-500 to-red-600 p-5 relative flex-shrink-0 text-center">
+          <div className="relative z-10 flex flex-col items-center">
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full mb-2">
+              <IconAlert className="text-white" size={24} />
             </div>
-            <div>
-              <h2 className="text-2xl font-bold">Confirm Delete</h2>
-              <p className="text-white/90">This action cannot be undone</p>
-            </div>
+            <h2 className="text-2xl font-bold text-white tracking-tight">Revoke Record Log</h2>
+            <p className="text-white/90 text-xs font-medium mt-0.5">Warning: Deletion is absolute and permanent</p>
           </div>
         </div>
 
-        <div className="p-8">
-          <div className="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-2xl p-6 mb-8">
-            <div className="flex items-start gap-4">
-              <div className="bg-gradient-to-br from-red-500 to-red-600 text-white p-2 rounded-xl flex-shrink-0">
-                <FiTrash2 size={20} />
-              </div>
-              <div>
-                <h3 className="font-bold text-red-800 text-lg mb-2">Delete Visit</h3>
-                <p className="text-red-700 leading-relaxed">
-                  Are you sure you want to permanently delete the visit for{" "}
-                  <span className="font-bold bg-white/60 px-2 py-1 rounded-lg">
-                    {visitToDelete?.personName}
-                  </span>
-                  ?
-                </p>
-              </div>
-            </div>
+        <div className="p-6 flex flex-col gap-4 overflow-y-auto flex-grow font-semibold">
+          <div className="text-slate-600 text-sm leading-relaxed text-center py-2">
+            Are you completely certain you want to permanently clean out the active appointment token logged for:
+            <p className="font-bold text-base text-gray-800 mt-2 bg-slate-50 border border-slate-200 rounded-xl py-2 px-4 truncate max-w-xs mx-auto">
+              {visitToDelete?.personName}
+            </p>
           </div>
 
           {visitToDelete && (
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 mb-8 border border-gray-200">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-gradient-to-br from-gray-600 to-gray-700 text-white p-2 rounded-xl">
-                  <FiUser size={18} />
-                </div>
-                <h4 className="font-bold text-gray-800">Visit Details</h4>
+            <div className="bg-slate-50/50 rounded-xl p-4 border border-gray-200/60 space-y-2 text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400 font-bold uppercase tracking-wider">Host Assigned:</span>
+                <span className="font-bold text-gray-800 truncate max-w-[200px]">{visitToDelete.hostName}</span>
               </div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium">Visitor:</span>
-                  <span className="font-semibold text-gray-800">{visitToDelete.personName}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium">Host:</span>
-                  <span className="font-semibold text-gray-800">{visitToDelete.hostName}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium">Code:</span>
-                  <span className="font-semibold text-orange-600">{visitToDelete.code}</span>
-                </div>
+              <div className="flex justify-between items-center pt-2 border-t border-gray-200/40">
+                <span className="text-gray-400 font-bold uppercase tracking-wider">Registration Code:</span>
+                <span className="font-mono font-bold text-orange-600 bg-white px-2 py-0.5 border border-orange-100 rounded">{visitToDelete.code}</span>
               </div>
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex gap-3 text-sm mt-4 mt-auto">
             <button
               onClick={cancelDelete}
-              className="relative flex-1 bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 text-gray-800 font-bold px-6 py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group"
+              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3.5 rounded-xl transition-all cursor-pointer"
             >
-              <span className="relative z-10 text-lg">Cancel</span>
+              Discard Action
             </button>
             <button
               onClick={confirmDelete}
-              className="relative flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold px-6 py-4 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden group"
+              className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-md hover:shadow-xl cursor-pointer"
             >
-              <span className="relative z-10 flex items-center justify-center gap-2 text-lg">
-                <FiTrash2 size={18} />
-                Yes, Delete
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+              Confirm Purge
             </button>
-          </div>
-
-          <div className="mt-6 p-4 bg-gray-50/80 rounded-2xl border border-gray-200">
-            <div className="flex items-start gap-3">
-              <FiAlertTriangle
-                size={16}
-                className="text-orange-500 mt-0.5 flex-shrink-0"
-              />
-              <div>
-                <h5 className="text-sm font-semibold text-gray-700 mb-1">
-                  Permanent Action
-                </h5>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  This action will permanently remove the visit record from the system. 
-                  The visitor will need to register again if they wish to visit.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

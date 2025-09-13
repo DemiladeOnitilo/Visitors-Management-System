@@ -14,6 +14,11 @@ import InputField from "../components/InputField";
 import SuccessModal from "../components/SuccessModal";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import TopBadge from "../components/TopBadge";
+import BackButton from "../components/BackButton";
+import MainButton from "../components/MainButton";
+import MainHeader from "../components/MainHeader";
 
 const AdminForm = () => {
   const [formData, setFormData] = useState({
@@ -164,6 +169,7 @@ const AdminForm = () => {
       code,
       hostName: admin?.name || "Admin",
       department: admin?.department || "Admin Department",
+      createdBy: "Admin"
     };
 
     const previousVisits = JSON.parse(localStorage.getItem("visits")) || [];
@@ -176,34 +182,19 @@ const AdminForm = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative">
-      <button
-        onClick={() => navigate("/admin")}
-        className="absolute top-6 left-6 z-100 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
-      >
-        <FiArrowLeft size={20} />
-        <span className="hidden md:block">Back to Login</span>
-      </button>
-
+      <BackButton
+        text="Back to Dashboard"
+        onClick={() => navigate("/admin/selection")}
+      />
       <main className="w-full max-w-2xl flex flex-col items-center gap-10 relative">
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 mt-16 md:mt-0">
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-3 rounded-xl shadow-lg">
-            <FaShieldAlt size={25} />
-          </div>
-          <span className="font-semibold text-xl">Visitor Management</span>
-        </div>
+        <TopBadge text="Visitor Management" icon={<FaShieldAlt size={14} />} />
 
-        <div className="flex flex-col items-center text-center gap-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-            Welcome,{" "}
-            <span className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent">
-              {admin?.name || "Admin"}
-            </span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Create a new visit entry with visitor details and schedule
-            information
-          </p>
-        </div>
+        <MainHeader
+          text="Welcome"
+          coloredText={admin?.name || "Admin"}
+          subtext=" Create a new visit entry with visitor details and schedule
+            information"
+        />
 
         <form
           onSubmit={handleSubmit}
@@ -298,20 +289,14 @@ const AdminForm = () => {
               error={errors.timeOut}
             />
           </div>
-          <button className="w-full mt-8 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg overflow-hidden group cursor-pointer relative shadow-lg hover:shadow-xl transition-all duration-300">
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              Create Visit
-              <FiArrowRight
-                size={20}
-                className="group-hover:translate-x-1 transition-transform duration-300"
-              />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-600 to-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
+          <MainButton
+            name="Create Visit"
+            variant="primary"
+            arrowRight={true}
+            onClick={handleSubmit}
+          />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-          </button>
-
-          <div className="mt-6 p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
+          <div className=" p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
             <div className="flex items-start gap-3">
               <FiShield
                 size={18}

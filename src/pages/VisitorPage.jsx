@@ -7,6 +7,9 @@ import FormStepTwo from "../components/FormStepTwo";
 import StepIndicator from "../components/StepIndicator";
 import { FiArrowLeft, FiUsers, FiShield } from "react-icons/fi";
 import { FaUserTie } from "react-icons/fa";
+import TopBadge from "../components/TopBadge";
+import BackButton from "../components/BackButton";
+import MainHeader from "../components/MainHeader";
 
 const VisitorPage = () => {
   const navigate = useNavigate();
@@ -155,8 +158,16 @@ const VisitorPage = () => {
       return;
     }
 
+
+
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const visitorData = { ...formData, code };
+  
+    const visitorData = { 
+    ...formData, 
+    code,
+    createdBy: "Visitor" 
+  };
+
     const previousVisits = JSON.parse(localStorage.getItem("visits")) || [];
     previousVisits.push(visitorData);
     localStorage.setItem("visits", JSON.stringify(previousVisits));
@@ -171,43 +182,23 @@ const VisitorPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center py-6 md:py-10 relative">
-      <button
-        onClick={() => navigate("/")}
-        className="absolute top-6 left-6 z-100 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
-      >
-        <FiArrowLeft size={20} />
-        <span className="hidden md:block">Back Home</span>
-      </button>
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 md:py-10 relative">
+      <BackButton text="Back Home" onClick={() => navigate("/")} />
 
-      <main className="w-full max-w-4xl flex flex-col items-center gap-8 relative px-4">
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 mt-16 md:mt-0">
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-3 rounded-xl shadow-lg">
-            <FaUserTie size={28} />
-          </div>
-          <div className="text-left">
-            <div className="font-bold text-xl text-slate-800">
-              Visitor Management
-            </div>
-            <div className="text-sm text-slate-600">
-              Secure Registration System
-            </div>
-          </div>
-        </div>
+      <main className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 pt-16 md:pt-0 relative z-10">
+        <TopBadge
+          text="Visitor Management"
+          subText="Secure Registration System"
+          icon={<FaUserTie size={14} />}
+        />
 
-        <div className="flex flex-col items-center gap-6 text-center max-w-4xl">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-            Welcome to our{" "}
-            <span className="bg-gradient-to-r from-orange-500 to-red-600  bg-clip-text text-transparent">
-              Visitor System
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-medium">
-            Register your visit in just two simple steps with our streamlined,
-            secure process designed for your convenience
-          </p>
-        </div>
-
+        <MainHeader
+          text="Welcome"
+          coloredText="Visitor"
+          subText=" Register your visit in just two simple steps with our streamlined,
+            secure process designed for your convenience"
+        />
+        
         <div className="flex flex-col gap-8 w-full max-w-3xl bg-white/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 shadow-2xl border border-white/50 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-3xl pointer-events-none"></div>
 

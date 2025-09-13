@@ -1,45 +1,55 @@
 import React, { useState, useEffect } from "react";
-import {
-  FiMail,
-  FiLock,
-  FiArrowLeft,
-  FiEyeOff,
-  FiEye,
-  FiShield,
-  FiArrowRight,
-} from "react-icons/fi";
+import { FiMail, FiLock, FiEyeOff, FiEye, FiShield } from "react-icons/fi";
 import { FaShieldAlt } from "react-icons/fa";
 import InputField from "../components/InputField";
 import { useNavigate } from "react-router-dom";
+import TopBadge from "../components/TopBadge";
+import BackButton from "../components/BackButton";
+import MainButton from "../components/MainButton";
+import MainHeader from "../components/MainHeader";
 
 const ReceptionLogin = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
+  const MASTER_RECEPTIONIST_ACCOUNTS = [
+    {
+      email: "demilade@2am.ng",
+      name: "Demilade Onitilo",
+      password: "Password2AM!",
+    },
+    {
+      email: "admin@2am.ng",
+      name: "System Admin",
+      password: "SecureAdmin2AM",
+    },
+  ];
+
+  // 1. Unified initialization effect hook
   useEffect(() => {
-    if (localStorage.getItem("receptionist")) {
-      localStorage.removeItem("receptionist");
-      window.location.href = "/admin/reception/login";
+    // Seed receptionist accounts database if empty
+    const existingReceptionists = localStorage.getItem("receptionists");
+    if (!existingReceptionists) {
+      localStorage.setItem(
+        "receptionists",
+        JSON.stringify(MASTER_RECEPTIONIST_ACCOUNTS),
+      );
+    }
+
+    // OPERATIONAL: Automatically restore the email if "Remember me" was previously toggled
+    const savedEmail = localStorage.getItem("remembered_reception_email");
+    if (savedEmail) {
+      setFormData((prev) => ({ ...prev, email: savedEmail }));
+      setRememberMe(true);
     }
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    let trimmedValue = value;
-    const fieldsToTrim = ["email"];
-    if (fieldsToTrim.includes(name)) {
-      trimmedValue = value.trimStart();
-    }
+    let trimmedValue = name === "email" ? value.trimStart() : value;
 
     setFormData((prev) => ({ ...prev, [name]: trimmedValue }));
 
@@ -56,7 +66,6 @@ const ReceptionLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let newErrors = {};
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.email) {
@@ -70,70 +79,59 @@ const ReceptionLogin = () => {
     }
 
     setError(newErrors);
-    if (Object.keys(newErrors).length > 0) {
-      return;
-    }
+    if (Object.keys(newErrors).length > 0) return;
 
-    const storedReceptionists =
-      JSON.parse(localStorage.getItem("receptionists")) || [];
+    const currentReceptionists =
+      JSON.parse(localStorage.getItem("receptionists")) ||
+      MASTER_RECEPTIONIST_ACCOUNTS;
 
-    const foundReceptionist = storedReceptionists.find(
+    const foundReceptionist = currentReceptionists.find(
       (receptionist) =>
-        receptionist.email === formData.email &&
-        receptionist.password === formData.password
+        receptionist.email.toLowerCase() ===
+          formData.email.trim().toLowerCase() &&
+        receptionist.password === formData.password,
     );
 
     if (foundReceptionist) {
+      // OPERATIONAL: Manage persistent cache states based on check parameters
+      if (rememberMe) {
+        localStorage.setItem("remembered_reception_email", formData.email.trim());
+      } else {
+        localStorage.removeItem("remembered_reception_email");
+      }
+
       localStorage.setItem("receptionist", JSON.stringify(foundReceptionist));
       navigate("/admin/reception/dashboard");
     } else {
-      const emailExists = storedReceptionists.find(
-        (receptionist) => receptionist.email === formData.email
+      const emailExists = currentReceptionists.find(
+        (receptionist) =>
+          receptionist.email.toLowerCase() ===
+          formData.email.trim().toLowerCase(),
       );
-
       if (emailExists) {
-        setError({
-          email: "",
-          password: "Incorrect password",
-        });
+        setError({ email: "", password: "Incorrect password" });
       } else {
-        setError({
-          email: "Email not found",
-          password: "",
-        });
+        setError({ email: "Email not found", password: "" });
       }
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative">
-      <button
-        onClick={() => navigate("/admin")}
-        className="absolute top-6 left-6 z-100 flex items-center gap-2 bg-white/90 backdrop-blur-sm text-slate-700 rounded-2xl shadow-lg hover:shadow-xl hover:text-orange-600 hover:scale-[1.02] md:px-6 md:py-4 p-4 font-semibold transition-all duration-300 cursor-pointer border border-white/50"
-      >
-        <FiArrowLeft size={20} />
-        <span className="hidden md:block">Back Home</span>
-      </button>
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 md:py-10 relative">
+      <BackButton text="Back" onClick={() => navigate("/admin")} />
 
-      <main className="w-full max-w-xl flex flex-col items-center gap-10 relative z-10">
-        <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 mt-16 md:mt-0">
-          <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-3 rounded-xl shadow-lg">
-            <FaShieldAlt size={25} />
-          </div>
-          <span className="font-semibold text-xl">Reception Login</span>
-        </div>
+      <main className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 pt-16 md:pt-0 relative z-10">
+        <TopBadge text="Reception Login" icon={<FaShieldAlt size={14} />} />
 
-        <div className="flex flex-col items-center text-center gap-4">
-          <h1 className="text-5xl md:text-6xl font-bold">Welcome Back</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Access the reception dashboard to manage visitors and handle daily
-            operations
-          </p>
-        </div>
+        <MainHeader
+          text="Welcome"
+          coloredText="Back"
+          subtext="Access the reception dashboard to manage visitors and handle daily operations"
+        />
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 w-full max-w-md font-semibold bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20"
+          className="flex flex-col gap-5 w-full max-w-md font-semibold bg-white/90 backdrop-blur-sm rounded-3xl p-6 pt-12 md:p-10 shadow-xl border border-white/20"
         >
           <InputField
             name="email"
@@ -160,7 +158,7 @@ const ReceptionLogin = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-12 text-gray-400 hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+              className="absolute right-3 top-14 text-gray-400 hover:text-gray-600 transition-colors duration-200 cursor-pointer"
             >
               {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </button>
@@ -175,32 +173,26 @@ const ReceptionLogin = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded"
+                className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
               />
-              <span className="text-sm text-gray-600">Remember me</span>
+              <span className="text-sm text-gray-600 select-none">Remember me</span>
             </div>
             <button
               type="button"
-              className="text-[#F97316] text-sm cursor-pointer font-semibold hover:underline hover:text-orange-600 transition-all duration-400"
+              className="text-[#F97316] text-sm font-semibold hover:underline"
             >
               Forgot password?
             </button>
           </div>
 
-          <button className="w-full mt-8 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg overflow-hidden group cursor-pointer relative shadow-lg hover:shadow-xl transition-all duration-300">
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              Login
-              <FiArrowRight
-                size={20}
-                className="group-hover:translate-x-1 transition-transform duration-300"
-              />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-600 to-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
+          <MainButton
+            name="Login"
+            variant="primary"
+            arrowRight={true}
+            onClick={handleSubmit}
+          />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-          </button>
-
-          <div className="mt-6 p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
+          <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
             <div className="flex items-start gap-3">
               <FiShield
                 size={18}
@@ -212,22 +204,11 @@ const ReceptionLogin = () => {
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Your reception dashboard access is protected with
-                  enterprise-grade security. All login attempts are monitored
-                  and logged for security purposes.
+                  enterprise-grade security. All login attempts are monitored.
                 </p>
               </div>
             </div>
           </div>
-
-          <p className="text-center text-sm mt-2">
-            New Reception Staff?{" "}
-            <span
-              onClick={() => navigate("/admin/reception/signup")}
-              className="text-[#F97316] hover:text-orange-600 cursor-pointer font-semibold hover:underline transition-all duration-400"
-            >
-              Sign Up here
-            </span>
-          </p>
         </form>
       </main>
     </div>

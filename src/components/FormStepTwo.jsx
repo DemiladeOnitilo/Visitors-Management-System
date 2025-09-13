@@ -12,6 +12,7 @@ import {
 } from "react-icons/fi";
 import { FaQuestion } from "react-icons/fa";
 import InputField from "./InputField";
+import MainButton from "./MainButton";
 
 const FormStepTwo = ({
   setActiveStep,
@@ -50,17 +51,17 @@ const FormStepTwo = ({
 
   return (
     <div className="space-y-8">
-      <div className="text-center space-y-3">
+      <div className="text-center space-y-3  max-w-xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200">
           <FiUser className="text-orange-600" size={18} />
-          <span className="text-sm font-bold text-orange-700">
+          <span className="text-xs md:text-sm font-bold text-orange-700">
             Personal Information
           </span>
         </div>
-        <h3 className="text-3xl font-bold text-slate-800">
+        <h3 className="text-2xl md:text-3xl font-bold text-slate-800">
           Tell us about yourself
         </h3>
-        <p className="text-slate-600 max-w-md mx-auto leading-relaxed">
+        <p className="text-sm md:text-xl text-slate-600 max-w-md mx-auto leading-relaxed">
           Please provide your contact details so we can process your visit
           registration
         </p>
@@ -124,10 +125,10 @@ const FormStepTwo = ({
                   Time
                 </span>
                 <div className="font-bold text-slate-700">
-                  <span>Time In:</span>{" "}{formatTime(formData.timeIn)}
+                  <span>Time In:</span> {formatTime(formData.timeIn)}
                 </div>
                 <div className="font-bold text-slate-700">
-                  <span>Time Out:</span>{" "}{formatTime(formData.timeOut)}
+                  <span>Time Out:</span> {formatTime(formData.timeOut)}
                 </div>
               </div>
             </div>
@@ -135,7 +136,7 @@ const FormStepTwo = ({
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="flex flex-col gap-6">
         <InputField
           name="personName"
           label="Your Full Name"
@@ -183,33 +184,18 @@ const FormStepTwo = ({
           error={errors.purpose}
         />
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <button
+        <div className="flex flex-col sm:flex-row gap-3 mt-4 w-full">
+          <MainButton
+            name="Back to Host Info"
+            arrowLeft={true}
             onClick={() => setActiveStep(1)}
-            className="w-full sm:w-auto px-8 py-4 bg-slate-100 text-slate-700 rounded-xl font-bold text-lg cursor-pointer hover:bg-slate-200 transition-all duration-300 flex items-center justify-center gap-3 group"
-          >
-            <FiArrowLeft
-              size={20}
-              className="group-hover:-translate-x-1 transition-transform duration-300"
-            />
-            Back to Host Info
-          </button>
-
-          <button
+          />
+          <MainButton
+            name="Complete Registration"
+            variant="primary"
+            arrowRight={true}
             onClick={handleSubmit}
-            className="flex-1 p-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg overflow-hidden group cursor-pointer relative shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              Complete Registration
-              <FiCheckCircle
-                size={20}
-                className="group-hover:rotate-12 transition-transform duration-300"
-              />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-600 to-slate-700 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"></div>
-
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-          </button>
+          />
         </div>
       </div>
 
@@ -238,9 +224,7 @@ const FormStepTwo = ({
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-xs text-gray-500">
-                  Host notification
-                </span>
+                <span className="text-xs text-gray-500">Host notification</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
