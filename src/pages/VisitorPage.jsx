@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import FormStepOne from "../components/FormStepOne";
 import FormStepTwo from "../components/FormStepTwo";
 import StepIndicator from "../components/StepIndicator";
-import { FiArrowLeft, FiUsers, FiShield } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
 import { FaUserTie } from "react-icons/fa";
 import TopBadge from "../components/TopBadge";
 import BackButton from "../components/BackButton";
@@ -158,15 +158,14 @@ const VisitorPage = () => {
       return;
     }
 
-
-
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-  
+    
     const visitorData = { 
-    ...formData, 
-    code,
-    createdBy: "Visitor" 
-  };
+      ...formData, 
+      code,
+      createdBy: "Visitor",
+      status: "Pending"
+    };
 
     const previousVisits = JSON.parse(localStorage.getItem("visits")) || [];
     previousVisits.push(visitorData);
@@ -186,17 +185,12 @@ const VisitorPage = () => {
       <BackButton text="Back Home" onClick={() => navigate("/")} />
 
       <main className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 pt-16 md:pt-0 relative z-10">
-        <TopBadge
-          text="Visitor Management"
-          subText="Secure Registration System"
-          icon={<FaUserTie size={14} />}
-        />
+        <TopBadge text="Visitor Management" icon={<FaUserTie size={14} />} />
 
         <MainHeader
-          text="Welcome"
-          coloredText="Visitor"
-          subText=" Register your visit in just two simple steps with our streamlined,
-            secure process designed for your convenience"
+          text="Register your"
+          coloredText="Visit Profile"
+          subText="Register your visit in just two simple steps with our streamlined, secure process designed for your convenience."
         />
         
         <div className="flex flex-col gap-8 w-full max-w-3xl bg-white/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 shadow-2xl border border-white/50 relative overflow-hidden">
@@ -205,7 +199,7 @@ const VisitorPage = () => {
           <div className="relative z-10">
             <StepIndicator activeStep={activeStep} isOpen={isOpen} />
 
-            {activeStep === 1 && (
+            ={activeStep === 1 && (
               <FormStepOne
                 handleUserSubmit={handleUserSubmit}
                 formData={formData}
@@ -243,19 +237,7 @@ const VisitorPage = () => {
         />
       )}
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName="backdrop-blur-sm"
-      />
+      <ToastContainer />
     </div>
   );
 };

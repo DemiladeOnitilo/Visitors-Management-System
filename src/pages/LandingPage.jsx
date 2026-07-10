@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../assets/2AM-logo-black.png";
-import { FiArrowRight, FiUsers, FiShield, FiCalendar } from "react-icons/fi";
-import { FaUserTie, FaUserCheck } from "react-icons/fa";
+import { FiUsers, FiShield, FiCalendar } from "react-icons/fi";
+import { FaUserCheck } from "react-icons/fa";
 import MainButton from "../components/MainButton";
 
 const LandingPage = () => {
@@ -55,7 +55,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Dynamic Core Trigger CTA Row */}
+          {/* Dynamic Trigger CTA Row */}
           {!isStaffMode ? (
             <div className="flex flex-col sm:flex-row gap-4 px-6 mt-2 w-full max-w-xl justify-center">
               <MainButton
@@ -101,7 +101,6 @@ const LandingPage = () => {
       <section className="bg-white/95 backdrop-blur-sm py-12 px-6 relative z-10 border-t border-white/50">
         <div className="absolute inset-0 bg-gradient-to-r from-orange-50/30 to-red-50/20 pointer-events-none"></div>
 
-        {/* FIXED: Dynamic class layout template switching from max 3 cols to max 1 col depending on target query mode */}
         <div className={`max-w-7xl mx-auto grid grid-cols-1 gap-6 relative z-10 ${
           isStaffMode ? "md:grid-cols-1 max-w-md" : "md:grid-cols-2 lg:grid-cols-3"
         }`}>
@@ -173,12 +172,8 @@ const LandingPage = () => {
 
       <footer className="text-center text-slate-500 text-sm py-6 relative z-10 bg-white/50 backdrop-blur-sm border-t border-white/50">
         <div className="max-w-7xl mx-auto px-6">
-          <p>
-            © {new Date().getFullYear()} 2AM TECH LIMITED. All rights reserved.
-          </p>
-          <p className="text-xs mt-1 text-slate-400">
-            Professional Visitor Management Solutions
-          </p>
+          <p>© {new Date().getFullYear()} 2AM TECH LIMITED. All rights reserved.</p>
+          <p className="text-xs mt-1 text-slate-400">Professional Visitor Management Solutions</p>
         </div>
       </footer>
     </div>

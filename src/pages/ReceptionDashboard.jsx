@@ -116,24 +116,19 @@ const ReceptionDashboard = () => {
     setConfirmDeleteModal(false);
   };
 
-  // ==========================================================
-  // MASTER MATRIX TIMELINE CALCULATIONS (VISITS + ROOMS)
-  // ==========================================================
   const todayDate = new Date().toISOString().split("T")[0];
 
-  // 1. Filter layout logic sorting current expected visitors vs historical archive records
   const filteredVisits = visits.filter((visit) => {
     const isPastVisit = visit.date && visit.date < todayDate;
 
-    if (filter === "Archived") return isPastVisit; // Isolate past records completely
-    if (isPastVisit) return false; // Hide old records from all active tabs automatically
+    if (filter === "Archived") return isPastVisit;
+    if (isPastVisit) return false;
 
     if (filter === "All") return true;
     if (filter === "Pending" && !visit.status) return true;
     return visit.status === filter;
   });
 
-  // 2. Room allocations variables remain synchronized
   const allReservations =
     JSON.parse(localStorage.getItem("room_reservations")) || [];
   const activeRoomReservations = allReservations.filter(
@@ -143,7 +138,6 @@ const ReceptionDashboard = () => {
     (room) => room.date < todayDate,
   );
 
-  // FIXED: Toggles exclusively to past operational reservations instead of mixing the arrays
   const displayedRooms = showArchivedRooms
     ? pastRoomReservations
     : activeRoomReservations;
@@ -154,7 +148,6 @@ const ReceptionDashboard = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
 
       <main className="w-full max-w-7xl flex flex-col items-center gap-6 md:gap-8 relative z-10 flex-grow">
-        {/* UPPER INFOBAR BRANDING ROW */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-4 max-w-7xl w-full">
           <div className="flex justify-between items-center w-full md:w-auto gap-4">
             <div className="flex items-center gap-4">
@@ -173,7 +166,6 @@ const ReceptionDashboard = () => {
                 </p>
               </div>
             </div>
-
             <button
               onClick={() => {
                 localStorage.removeItem("receptionist");
@@ -185,7 +177,6 @@ const ReceptionDashboard = () => {
               <FiLogOut size={20} className="text-red-500" />
             </button>
           </div>
-
           <button
             onClick={() => {
               localStorage.removeItem("receptionist");
@@ -201,9 +192,7 @@ const ReceptionDashboard = () => {
           </button>
         </div>
 
-        {/* COMBINED TRACKER SECTION ROW */}
         <div className="w-full flex flex-col lg:flex-row gap-6 items-start">
-          {/* LEFT CONTAINER CHECK CODE MODULE */}
           <div className="flex flex-col gap-6 w-full lg:max-w-xl bg-white/90 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border border-slate-300 relative overflow-hidden shrink-0">
             <div className="relative z-10 flex flex-col gap-5 w-full">
               <div className="flex flex-col sm:flex-row gap-4 w-full">
@@ -226,7 +215,6 @@ const ReceptionDashboard = () => {
                   />
                 </div>
               </div>
-
               <div className="flex gap-2 flex-wrap justify-center sm:justify-start items-center border-t border-slate-300 pt-4">
                 {[
                   "All",
@@ -252,7 +240,6 @@ const ReceptionDashboard = () => {
             </div>
           </div>
 
-          {/* RIGHT CONTAINER ROOM ALLOCATIONS MONITOR */}
           <div className="bg-white/90 backdrop-blur-sm border border-slate-300 rounded-3xl p-6 shadow-xl w-full flex-grow lg:max-w-2xl">
             <div className="flex justify-between items-center border-b border-slate-100 pb-2 mb-3 gap-4 flex-wrap">
               <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
@@ -261,7 +248,6 @@ const ReceptionDashboard = () => {
                   ? "Archived Room Reservations"
                   : "Today's Active Allocations"}
               </h3>
-
               {pastRoomReservations.length > 0 && (
                 <button
                   type="button"
@@ -312,23 +298,13 @@ const ReceptionDashboard = () => {
                           ({room.timeIn} - {room.timeOut}) • {room.date}
                         </span>
                       </div>
-                      <div className="flex flex-col">
-                        <div className="shrink-0 text-right">
-                          <span className="text-xs">Host: </span>
-                          <span
-                            className={`font-bold ${isPast ? "text-slate-400" : "text-orange-600"}`}
-                          >
-                            {room.bookedBy}
-                          </span>
-                        </div>
-                        <div className="shrink-0 text-right">
-                          <span className="text-xs">Purpose: </span>
-                          <span
-                            className={`font-bold ${isPast ? "text-slate-400" : "text-orange-600"}`}
-                          >
-                            {room.purpose}
-                          </span>
-                        </div>
+                      <div className="shrink-0 text-right text-slate-500">
+                        Host:{" "}
+                        <span
+                          className={`font-bold ${isPast ? "text-slate-400" : "text-orange-600"}`}
+                        >
+                          {room.bookedBy}
+                        </span>
                       </div>
                     </div>
                   );
@@ -338,7 +314,6 @@ const ReceptionDashboard = () => {
           </div>
         </div>
 
-        {/* VISITS RECORD OVERVIEW COMPONENT OUTPUT MATRIX */}
         <div className="w-full flex-grow flex flex-col mt-4">
           {filteredVisits.length === 0 ? (
             <div className="flex-grow flex items-center justify-center py-12 w-full">
@@ -360,335 +335,175 @@ const ReceptionDashboard = () => {
               </div>
             </div>
           ) : (
-            <>
-              {/* DESKTOP MATRIX ROW CONTAINER */}
-              <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-                {filteredVisits.map((visit) => {
-                  const isPastVisit = visit.date && visit.date < todayDate;
-                  return (
-                    <div
-                      key={visit.code}
-                      className={`bg-white/90 backdrop-blur-sm border rounded-3xl shadow-xl p-6 flex flex-col justify-between gap-5 hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-300 group ${
-                        isPastVisit
-                          ? "border-slate-200 bg-slate-50/50 opacity-75"
-                          : "border-slate-300"
-                      }`}
-                    >
-                      <div>
-                        <div className="flex justify-between items-start gap-4 mb-3">
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 mb-1 flex-wrap">
-                              <h2
-                                className={`text-xl font-bold tracking-tight group-hover:text-orange-600 transition-colors truncate ${
-                                  isPastVisit
-                                    ? "text-slate-400 line-through decoration-slate-300"
-                                    : "text-gray-800"
-                                }`}
-                              >
-                                {visit.personName}
-                              </h2>
-                              <span
-                                className={`text-[10px] px-2 py-0.5 font-extrabold tracking-wide uppercase rounded-full shrink-0 ${
-                                  isPastVisit
-                                    ? "bg-slate-100 text-slate-400 border border-slate-200"
-                                    : visit.createdBy === "Admin"
-                                      ? "bg-blue-50 text-blue-600 border border-blue-200"
-                                      : "bg-purple-50 text-purple-600 border border-purple-200"
-                                }`}
-                              >
-                                {visit.createdBy || "Visitor"}
-                              </span>
-                            </div>
-                            <p className="text-sm font-semibold text-gray-500 truncate">
-                              {visit.purpose}
-                            </p>
-                          </div>
-                          <span
-                            className={`px-3 py-1 rounded-2xl text-xs font-bold shrink-0 shadow-sm text-white ${
-                              isPastVisit
-                                ? "bg-slate-400"
-                                : visit.status === "Checked In"
-                                  ? "bg-gradient-to-r from-green-400 to-green-600"
-                                  : visit.status === "Declined"
-                                    ? "bg-gradient-to-r from-red-400 to-red-600"
-                                    : visit.status === "Rescheduled"
-                                      ? "bg-gradient-to-r from-blue-400 to-purple-600"
-                                      : "bg-gradient-to-r from-yellow-400 to-yellow-600"
-                            }`}
-                          >
-                            {isPastVisit
-                              ? "Expired"
-                              : visit.status || "Pending"}
-                          </span>
-                        </div>
-
-                        <div className="bg-gray-50/80 rounded-2xl p-4 space-y-3 border border-gray-200/60 font-semibold">
-                          <div className="flex items-start gap-2.5 text-sm">
-                            <FiBriefcase
-                              className="text-orange-500 mt-0.5"
-                              size={14}
-                            />
-                            <div className="min-w-0">
-                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
-                                Host
-                              </p>
-                              <p
-                                className={`font-bold text-sm truncate ${isPastVisit ? "text-slate-400" : "text-gray-800"}`}
-                              >
-                                {visit.hostName}{" "}
-                                <span className="text-orange-600 text-xs font-semibold">
-                                  ({visit.department})
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t border-gray-200/60">
-                            <div className="flex items-start gap-1.5">
-                              <FiCalendar
-                                className="text-orange-500 mt-0.5"
-                                size={13}
-                              />
-                              <div>
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
-                                  Date
-                                </p>
-                                <p
-                                  className={`font-bold text-xs ${isPastVisit ? "text-slate-400" : "text-gray-800"}`}
-                                >
-                                  {visit.date || "N/A"}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-1.5">
-                              <FiClock
-                                className="text-orange-500 mt-0.5"
-                                size={13}
-                              />
-                              <div>
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
-                                  Time Block
-                                </p>
-                                <p
-                                  className={`font-bold text-[11px] truncate ${isPastVisit ? "text-slate-400" : "text-gray-800"}`}
-                                >
-                                  {visit.timeIn} - {visit.timeOut}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="pt-2 border-t border-gray-200/60 flex justify-between items-center">
-                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
-                              Visit Code
-                            </span>
-                            <span className="font-mono font-black text-base text-orange-600 bg-white px-2.5 py-0.5 rounded-lg border border-orange-100 shadow-sm">
-                              {visit.code}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-2 font-bold text-xs">
-                        {isPastVisit ? (
-                          <p className="text-center text-[11px] font-bold text-slate-400 py-2 bg-slate-100/60 border border-slate-200 rounded-xl">
-                            Historical audit logs are locked from changes
-                          </p>
-                        ) : (
-                          <>
-                            <div className="grid grid-cols-2 gap-2">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  updateVisitStatus(visit.code, "Declined")
-                                }
-                                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-2.5 rounded-xl cursor-pointer shadow-sm font-bold transition-all transform hover:scale-[1.01]"
-                              >
-                                Decline
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  updateVisitStatus(visit.code, "Checked In")
-                                }
-                                className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-2.5 rounded-xl cursor-pointer shadow-sm font-bold transition-all transform hover:scale-[1.01]"
-                              >
-                                Check In
-                              </button>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 text-slate-600">
-                              <button
-                                type="button"
-                                onClick={() => handleRescheduleClick(visit)}
-                                className="bg-white border border-gray-200 hover:bg-gray-50 py-2 rounded-xl transition-all flex items-center justify-center gap-1 shadow-sm font-bold cursor-pointer text-sm hover:text-orange-600 transform hover:scale-[1.01]"
-                              >
-                                <FiRefreshCw size={12} /> Reschedule
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleDeleteClick(visit)}
-                                className="bg-white border border-transparent hover:border-red-100 text-gray-400 hover:text-red-600 py-2 rounded-xl transition-all shadow-sm font-bold cursor-pointer text-sm flex items-center justify-center gap-1 transform hover:scale-[1.01]"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* MOBILE ACCORDION STACK VIEW */}
-              <div className="block md:hidden space-y-3 w-full font-semibold">
-                {filteredVisits.map((visit) => {
-                  const isExpanded = !!expandedVisits[visit.code];
-                  const isPastVisit = visit.date && visit.date < todayDate;
-                  return (
-                    <div
-                      key={visit.code}
-                      className={`bg-white/90 backdrop-blur-sm border rounded-2xl overflow-hidden shadow-lg w-full ${
-                        isPastVisit
-                          ? "border-slate-200 opacity-80"
-                          : "border-white/50"
-                      }`}
-                    >
-                      <div
-                        onClick={() => toggleExpand(visit.code)}
-                        className="p-4 flex items-center justify-between gap-3 active:bg-orange-50/50 transition-colors cursor-pointer"
-                      >
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                            <h3
-                              className={`font-bold text-base truncate ${isPastVisit ? "text-slate-400 line-through decoration-slate-300" : "text-gray-800"}`}
+            <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              {filteredVisits.map((visit) => {
+                const isPastVisit = visit.date && visit.date < todayDate;
+                return (
+                  <div
+                    key={visit.code}
+                    className={`bg-white/90 backdrop-blur-sm border rounded-3xl shadow-xl p-6 flex flex-col justify-between gap-5 hover:shadow-2xl hover:scale-[1.02] transform transition-all duration-300 group ${
+                      isPastVisit
+                        ? "border-slate-200 bg-slate-50/50 opacity-75"
+                        : "border-slate-300"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex justify-between items-start gap-4 mb-3">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <h2
+                              className={`text-xl font-bold tracking-tight group-hover:text-orange-600 transition-colors truncate ${isPastVisit ? "text-slate-400 line-through decoration-slate-300" : "text-gray-800"}`}
                             >
                               {visit.personName}
-                            </h3>
-                            <span className="font-mono font-black text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded border border-orange-100">
-                              {visit.code}
+                            </h2>
+                            <span
+                              className={`text-[10px] px-2 py-0.5 font-extrabold tracking-wide uppercase rounded-full shrink-0 ${
+                                isPastVisit
+                                  ? "bg-slate-100 text-slate-400 border border-slate-200"
+                                  : visit.createdBy === "Admin"
+                                    ? "bg-blue-50 text-blue-600 border border-blue-200"
+                                    : "bg-purple-50 text-purple-600 border border-purple-200"
+                              }`}
+                            >
+                              {visit.createdBy || "Visitor"}
                             </span>
                           </div>
-                          <p className="text-xs text-gray-500 font-semibold truncate">
-                            {visit.purpose} •{" "}
-                            <span className="text-orange-600">
-                              {visit.timeIn || "N/A"}
-                            </span>
+                          <p className="text-sm font-semibold text-gray-500 truncate">
+                            {visit.purpose}
                           </p>
                         </div>
-
-                        <div className="flex items-center gap-2 shrink-0">
-                          <span
-                            className={`px-2.5 py-0.5 rounded-xl text-[10px] font-bold text-white shadow-sm ${
-                              isPastVisit
-                                ? "bg-slate-400"
-                                : visit.status === "Checked In"
-                                  ? "bg-gradient-to-r from-green-400 to-green-600"
-                                  : visit.status === "Declined"
-                                    ? "bg-gradient-to-r from-red-400 to-red-600"
-                                    : visit.status === "Rescheduled"
-                                      ? "bg-gradient-to-r from-blue-400 to-purple-600"
-                                      : "bg-gradient-to-r from-yellow-400 to-yellow-600"
-                            }`}
-                          >
-                            {isPastVisit
-                              ? "Expired"
-                              : visit.status || "Pending"}
-                          </span>
-                          {isExpanded ? (
-                            <FiChevronUp className="text-gray-400" size={18} />
-                          ) : (
-                            <FiChevronDown
-                              className="text-gray-400"
-                              size={18}
-                            />
-                          )}
-                        </div>
+                        <span
+                          className={`px-3 py-1 rounded-2xl text-xs font-bold shrink-0 shadow-sm text-white ${
+                            isPastVisit
+                              ? "bg-slate-400"
+                              : visit.status === "Checked In"
+                                ? "bg-gradient-to-r from-green-400 to-green-600"
+                                : visit.status === "Declined"
+                                  ? "bg-gradient-to-r from-red-400 to-red-600"
+                                  : visit.status === "Rescheduled"
+                                    ? "bg-gradient-to-r from-blue-400 to-purple-600"
+                                    : "bg-gradient-to-r from-yellow-400 to-yellow-600"
+                          }`}
+                        >
+                          {isPastVisit ? "Expired" : visit.status || "Pending"}
+                        </span>
                       </div>
 
-                      {isExpanded && (
-                        <div className="px-4 pb-4 pt-1 bg-gray-50/50 border-t border-gray-100 space-y-4">
-                          <div className="grid grid-cols-2 gap-3 text-xs bg-white p-3 rounded-xl border border-gray-200/60 font-bold">
-                            <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">
-                                Origin / Host
-                              </p>
-                              <p className="font-bold text-gray-800 mt-0.5 truncate">
-                                {visit.hostName}
-                              </p>
-                              <p className="text-orange-600 text-[10px] truncate">
-                                Src: {visit.createdBy || "Visitor"}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">
-                                Date & Timeout
-                              </p>
-                              <p className="font-bold text-gray-700 mt-0.5">
-                                {visit.date || "N/A"}
-                              </p>
-                              <p className="text-gray-400 text-[10px]">
-                                Est. Exit: {visit.timeOut || "N/A"}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col gap-2 font-bold text-xs">
-                            {isPastVisit ? (
-                              <p className="text-center text-[10px] font-bold text-slate-400 py-2 bg-slate-100/60 rounded-xl">
-                                Record context locked from changes
-                              </p>
-                            ) : (
-                              <>
-                                <div className="grid grid-cols-2 gap-2">
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      updateVisitStatus(visit.code, "Declined")
-                                    }
-                                    className="bg-gradient-to-r from-red-500 to-red-600 text-white py-2.5 rounded-xl shadow-sm cursor-pointer"
-                                  >
-                                    Decline
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      updateVisitStatus(
-                                        visit.code,
-                                        "Checked In",
-                                      )
-                                    }
-                                    className="bg-gradient-to-r from-green-500 to-green-600 text-white py-2.5 rounded-xl shadow-sm cursor-pointer"
-                                  >
-                                    Check In
-                                  </button>
-                                </div>
-                                <div className="grid grid-cols-2 gap-2 text-slate-600">
-                                  <button
-                                    type="button"
-                                    onClick={() => handleRescheduleClick(visit)}
-                                    className="bg-white border border-gray-200 py-2.5 rounded-xl flex items-center justify-center gap-1 shadow-sm cursor-pointer"
-                                  >
-                                    <FiRefreshCw size={12} /> Reschedule
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteClick(visit)}
-                                    className="bg-white border border-transparent text-gray-400 py-2.5 rounded-xl cursor-pointer"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </>
-                            )}
+                      <div className="bg-gray-50/80 rounded-2xl p-4 space-y-3 border border-gray-200/60 font-semibold">
+                        <div className="flex items-start gap-2.5 text-sm">
+                          <FiBriefcase
+                            className="text-orange-500 mt-0.5"
+                            size={14}
+                          />
+                          <div className="min-w-0">
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
+                              Host
+                            </p>
+                            <p
+                              className={`font-bold text-sm truncate ${isPastVisit ? "text-slate-400" : "text-gray-800"}`}
+                            >
+                              {visit.hostName}{" "}
+                              <span className="text-orange-600 text-xs font-semibold">
+                                ({visit.department})
+                              </span>
+                            </p>
                           </div>
                         </div>
+                        <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t border-gray-200/60">
+                          <div className="flex items-start gap-1.5">
+                            <FiCalendar
+                              className="text-orange-500 mt-0.5"
+                              size={13}
+                            />
+                            <div>
+                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
+                                Date
+                              </p>
+                              <p
+                                className={`font-bold text-xs ${isPastVisit ? "text-slate-400" : "text-gray-800"}`}
+                              >
+                                {visit.date || "N/A"}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <FiClock
+                              className="text-orange-500 mt-0.5"
+                              size={13}
+                            />
+                            <div>
+                              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
+                                Time Block
+                              </p>
+                              <p
+                                className={`font-bold text-[11px] truncate ${isPastVisit ? "text-slate-400" : "text-gray-800"}`}
+                              >
+                                {visit.timeIn} - {visit.timeOut}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="pt-2 border-t border-gray-200/60 flex justify-between items-center">
+                          <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wide">
+                            Visit Code
+                          </span>
+                          <span className="font-mono font-black text-base text-orange-600 bg-white px-2.5 py-0.5 rounded-lg border border-orange-100 shadow-sm">
+                            {visit.code}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2 font-bold text-xs">
+                      {isPastVisit ? (
+                        <p className="text-center text-[11px] font-bold text-slate-400 py-2 bg-slate-100/60 border border-slate-200 rounded-xl">
+                          Historical audit logs locked
+                        </p>
+                      ) : (
+                        <>
+                          <div className="grid grid-cols-2 gap-2">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateVisitStatus(visit.code, "Declined")
+                              }
+                              className="bg-gradient-to-r from-red-500 to-red-600 text-white py-2.5 rounded-xl cursor-pointer font-bold shadow-sm"
+                            >
+                              Decline
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateVisitStatus(visit.code, "Checked In")
+                              }
+                              className="bg-gradient-to-r from-green-500 to-green-600 text-white py-2.5 rounded-xl cursor-pointer font-bold shadow-sm"
+                            >
+                              Check In
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-slate-600">
+                            <button
+                              type="button"
+                              onClick={() => handleRescheduleClick(visit)}
+                              className="bg-white border border-gray-200 py-2 rounded-xl flex items-center justify-center gap-1 shadow-sm font-bold cursor-pointer text-sm hover:text-orange-600"
+                            >
+                              <FiRefreshCw size={12} /> Reschedule
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteClick(visit)}
+                              className="bg-white border border-transparent text-gray-400 hover:text-red-600 py-2 rounded-xl text-sm font-bold cursor-pointer"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </>
                       )}
                     </div>
-                  );
-                })}
-              </div>
-            </>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       </main>
@@ -701,21 +516,18 @@ const ReceptionDashboard = () => {
         handleDeleteClick={handleDeleteClick}
         handleRescheduleClick={handleRescheduleClick}
       />
-
       <DeleteModal
         confirmDelete={confirmDelete}
         confirmDeleteModal={confirmDeleteModal}
         visitToDelete={visitToDelete}
         cancelDelete={cancelDelete}
       />
-
       <RescheduleModal
         isOpen={rescheduleModal}
         onClose={() => setRescheduleModal(false)}
         visit={visitToReschedule}
         onReschedule={handleReschedule}
       />
-
       <ToastContainer />
     </div>
   );

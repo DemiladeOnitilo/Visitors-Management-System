@@ -3,11 +3,9 @@ import {
   FiMail,
   FiPhone,
   FiUser,
-  FiArrowLeft,
   FiCalendar,
   FiClock,
   FiShield,
-  FiArrowRight,
 } from "react-icons/fi";
 import { FaQuestion, FaShieldAlt } from "react-icons/fa";
 import InputField from "../components/InputField";
@@ -52,7 +50,7 @@ const AdminForm = () => {
       const parsedAdmin = JSON.parse(storedAdmin);
       setAdmin(parsedAdmin);
     } else {
-      navigate("/admin/login");
+      navigate("/admin/login?mode=staff");
     }
   }, [navigate]);
 
@@ -169,7 +167,8 @@ const AdminForm = () => {
       code,
       hostName: admin?.name || "Admin",
       department: admin?.department || "Admin Department",
-      createdBy: "Admin"
+      createdBy: "Admin",
+      status: "Pending"
     };
 
     const previousVisits = JSON.parse(localStorage.getItem("visits")) || [];
@@ -181,32 +180,35 @@ const AdminForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative">
+    <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative w-full">
+      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
+
       <BackButton
         text="Back to Dashboard"
-        onClick={() => navigate("/admin/selection")}
+        onClick={() => navigate("/admin/selection?mode=staff")}
       />
-      <main className="w-full max-w-2xl flex flex-col items-center gap-10 relative">
+      
+      <main className="w-full max-w-2xl flex flex-col items-center gap-6 md:gap-8 pt-16 md:pt-0 relative z-10 px-4">
         <TopBadge text="Visitor Management" icon={<FaShieldAlt size={14} />} />
 
         <MainHeader
-          text="Welcome"
+          text="Welcome,"
           coloredText={admin?.name || "Admin"}
-          subtext=" Create a new visit entry with visitor details and schedule
-            information"
+          subtext="Create a new visit entry with visitor details and schedule information cleanly managed inside local storage systems."
         />
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 font-semibold bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20"
+          className="flex flex-col gap-5 font-semibold bg-white/90 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border border-slate-300/40 w-full"
         >
-          <p className="text-center text-sm mt-2 text-gray-500">
+          <p className="text-center text-xs md:text-sm text-gray-500 border-b border-slate-100 pb-2">
             Host:{" "}
-            <span className="text-[#F97316] font-semibold">
+            <span className="text-[#F97316]">
               {admin?.name || "Admin"}
             </span>{" "}
             • Department:{" "}
-            <span className="text-[#F97316] font-semibold">
+            <span className="text-[#F97316]">
               {admin?.department || "Admin Department"}
             </span>
           </p>
@@ -252,7 +254,7 @@ const AdminForm = () => {
             label="Purpose of Visit"
             type="text"
             icon={<FaQuestion size={15} />}
-            placeholder="Why are you visiting"
+            placeholder="Why are they visiting?"
             handleChange={handleChange}
             value={formData.purpose}
             error={errors.purpose}
@@ -289,6 +291,7 @@ const AdminForm = () => {
               error={errors.timeOut}
             />
           </div>
+          
           <MainButton
             name="Create Visit"
             variant="primary"
@@ -296,20 +299,15 @@ const AdminForm = () => {
             onClick={handleSubmit}
           />
 
-          <div className=" p-4 bg-slate-50/50 rounded-2xl border border-slate-200">
+          <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-200 mt-2">
             <div className="flex items-start gap-3">
-              <FiShield
-                size={18}
-                className="text-orange-500 mt-0.5 flex-shrink-0"
-              />
+              <FiShield size={18} className="text-orange-500 mt-0.5 flex-shrink-0" />
               <div>
-                <h4 className="text-sm font-semibold text-slate-700 mb-1">
-                  Visit Security
+                <h4 className="text-sm font-semibold text-slate-700 mb-0.5">
+                  Audit Authentication Logged
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  All visitor entries are logged and monitored for security
-                  purposes. A unique access code will be generated for each
-                  visit.
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  This visitor entry will be logged into your system tracking history with an explicit provenance origin tag pointing directly to your host profile.
                 </p>
               </div>
             </div>
@@ -317,13 +315,11 @@ const AdminForm = () => {
         </form>
       </main>
 
-      {isOpen && (
-        <SuccessModal
-          formData={formData}
-          isOpen={isOpen}
-          closeModal={closeModal}
-        />
-      )}
+      <SuccessModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        formData={formData}
+      />
       <ToastContainer />
     </div>
   );
