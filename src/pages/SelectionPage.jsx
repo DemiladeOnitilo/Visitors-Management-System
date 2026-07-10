@@ -59,7 +59,7 @@ const SelectionPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-900 flex items-center justify-center p-6 md:p-8 relative overflow-x-hidden">
+    <div className="min-h-screen flex items-center justify-center p-6 md:p-8 relative overflow-x-hidden">
       <BackButton text="Back Home" onClick={() => navigate("/")} />
 
       <main className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 pt-16 md:pt-0 relative z-10">

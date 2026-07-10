@@ -168,7 +168,7 @@ const AdminForm = () => {
       hostName: admin?.name || "Admin",
       department: admin?.department || "Admin Department",
       createdBy: "Admin",
-      status: "Pending"
+      status: "Pending",
     };
 
     const previousVisits = JSON.parse(localStorage.getItem("visits")) || [];
@@ -181,14 +181,11 @@ const AdminForm = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center py-4 md:py-10 relative w-full">
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
-
       <BackButton
         text="Back to Dashboard"
         onClick={() => navigate("/admin/selection?mode=staff")}
       />
-      
+
       <main className="w-full max-w-2xl flex flex-col items-center gap-6 md:gap-8 pt-16 md:pt-0 relative z-10 px-4">
         <TopBadge text="Visitor Management" icon={<FaShieldAlt size={14} />} />
 
@@ -204,10 +201,8 @@ const AdminForm = () => {
         >
           <p className="text-center text-xs md:text-sm text-gray-500 border-b border-slate-100 pb-2">
             Host:{" "}
-            <span className="text-[#F97316]">
-              {admin?.name || "Admin"}
-            </span>{" "}
-            • Department:{" "}
+            <span className="text-[#F97316]">{admin?.name || "Admin"}</span> •
+            Department:{" "}
             <span className="text-[#F97316]">
               {admin?.department || "Admin Department"}
             </span>
@@ -291,7 +286,7 @@ const AdminForm = () => {
               error={errors.timeOut}
             />
           </div>
-          
+
           <MainButton
             name="Create Visit"
             variant="primary"
@@ -301,13 +296,18 @@ const AdminForm = () => {
 
           <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-200 mt-2">
             <div className="flex items-start gap-3">
-              <FiShield size={18} className="text-orange-500 mt-0.5 flex-shrink-0" />
+              <FiShield
+                size={18}
+                className="text-orange-500 mt-0.5 flex-shrink-0"
+              />
               <div>
                 <h4 className="text-sm font-semibold text-slate-700 mb-0.5">
                   Audit Authentication Logged
                 </h4>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  This visitor entry will be logged into your system tracking history with an explicit provenance origin tag pointing directly to your host profile.
+                  This visitor entry will be logged into your system tracking
+                  history with an explicit provenance origin tag pointing
+                  directly to your host profile.
                 </p>
               </div>
             </div>

@@ -95,7 +95,10 @@ const ReceptionLogin = () => {
     if (foundReceptionist) {
       // OPERATIONAL: Manage persistent cache states based on check parameters
       if (rememberMe) {
-        localStorage.setItem("remembered_reception_email", formData.email.trim());
+        localStorage.setItem(
+          "remembered_reception_email",
+          formData.email.trim(),
+        );
       } else {
         localStorage.removeItem("remembered_reception_email");
       }
@@ -175,7 +178,9 @@ const ReceptionLogin = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
               />
-              <span className="text-sm text-gray-600 select-none">Remember me</span>
+              <span className="text-sm text-gray-600 select-none">
+                Remember me
+              </span>
             </div>
             <button
               type="button"

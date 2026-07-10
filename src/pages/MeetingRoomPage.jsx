@@ -169,9 +169,6 @@ const MeetingRoomPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 md:py-10 relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
-
       <BackButton
         text="Back to Dashboard"
         onClick={() => navigate("/admin/selection?mode=staff")}

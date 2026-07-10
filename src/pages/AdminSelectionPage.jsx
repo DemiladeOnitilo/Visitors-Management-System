@@ -24,11 +24,7 @@ const AdminSelectionPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 md:py-10 relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
-
       <main className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-10 pt-12 md:pt-0 relative z-10 flex-grow">
-        
         {/* Upper Functional Action Bar */}
         <div className="w-full flex justify-end px-2">
           <button
@@ -50,11 +46,10 @@ const AdminSelectionPage = () => {
 
         {/* Selection Cards Split Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mt-2">
-          
           {/* Card Component 1: Visitor Forms Allocation */}
           <div
             onClick={() => navigate("/admin/form")}
-            className="group bg-white/90 backdrop-blur-sm hover:bg-orange-50/50 cursor-pointer rounded-3xl p-8 flex flex-col gap-4 shadow-xl border border-white/20 hover:border-orange-200 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
+            className="group bg-white/90 backdrop-blur-sm  cursor-pointer rounded-3xl p-8 flex flex-col gap-4 shadow-xl border border-white/20 hover:border-orange-200 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
           >
             <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-4 rounded-2xl w-fit shadow-lg">
               <FiUsers size={28} />
@@ -64,7 +59,8 @@ const AdminSelectionPage = () => {
                 Visitor Registration
               </h3>
               <p className="text-slate-500 font-medium text-sm leading-relaxed">
-                Log expected guests, check appointments data entries, and create secure reception access token keys.
+                Log expected guests, check appointments data entries, and create
+                secure reception access token keys.
               </p>
             </div>
           </div>
@@ -72,7 +68,7 @@ const AdminSelectionPage = () => {
           {/* Card Component 2: Meeting Room Timeline Scheduler */}
           <div
             onClick={() => navigate("/meeting-room")}
-            className="group bg-white/90 backdrop-blur-sm hover:bg-orange-50/50 cursor-pointer rounded-3xl p-8 flex flex-col gap-4 shadow-xl border border-white/20 hover:border-orange-200 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
+            className="group bg-white/90 backdrop-blur-sm  cursor-pointer rounded-3xl p-8 flex flex-col gap-4 shadow-xl border border-white/20 hover:border-orange-200 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
           >
             <div className="bg-gradient-to-br from-orange-500 to-red-600 text-white p-4 rounded-2xl w-fit shadow-lg">
               <FiMapPin size={28} />
@@ -82,11 +78,12 @@ const AdminSelectionPage = () => {
                 Meeting Rooms
               </h3>
               <p className="text-slate-500 font-medium text-sm leading-relaxed">
-                Reserve building boardrooms, confirm calendar timeline availability matrix windows, and prevent multi-party block conflicts.
+                Reserve building boardrooms, confirm calendar timeline
+                availability matrix windows, and prevent multi-party block
+                conflicts.
               </p>
             </div>
           </div>
-
         </div>
       </main>
     </div>

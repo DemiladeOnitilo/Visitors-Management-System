@@ -19,7 +19,7 @@ const AdminLogin = () => {
       email: "demilade@2am.ng",
       name: "Demilade Onitilo",
       department: "Software Engineering",
-      password: "Password2AM!", 
+      password: "Password2AM!",
     },
     {
       email: "admin@2am.ng",
@@ -79,11 +79,13 @@ const AdminLogin = () => {
     setError(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    const currentAdmins = JSON.parse(localStorage.getItem("admins")) || MASTER_ADMIN_ACCOUNTS;
-    
+    const currentAdmins =
+      JSON.parse(localStorage.getItem("admins")) || MASTER_ADMIN_ACCOUNTS;
+
     const foundAdmin = currentAdmins.find(
       (admin) =>
-        admin.email.toLowerCase() === formData.email.trim().toLowerCase() && admin.password === formData.password,
+        admin.email.toLowerCase() === formData.email.trim().toLowerCase() &&
+        admin.password === formData.password,
     );
 
     if (foundAdmin) {
@@ -98,7 +100,8 @@ const AdminLogin = () => {
       navigate("/admin/selection");
     } else {
       const emailExists = currentAdmins.find(
-        (admin) => admin.email.toLowerCase() === formData.email.trim().toLowerCase(),
+        (admin) =>
+          admin.email.toLowerCase() === formData.email.trim().toLowerCase(),
       );
       if (emailExists) {
         setError({ email: "", password: "Incorrect password" });
@@ -167,7 +170,9 @@ const AdminLogin = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
               />
-              <span className="text-sm text-gray-600 select-none">Remember me</span>
+              <span className="text-sm text-gray-600 select-none">
+                Remember me
+              </span>
             </div>
             <button
               type="button"

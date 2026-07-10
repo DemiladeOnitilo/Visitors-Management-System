@@ -159,12 +159,12 @@ const VisitorPage = () => {
     }
 
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    
-    const visitorData = { 
-      ...formData, 
+
+    const visitorData = {
+      ...formData,
       code,
       createdBy: "Visitor",
-      status: "Pending"
+      status: "Pending",
     };
 
     const previousVisits = JSON.parse(localStorage.getItem("visits")) || [];
@@ -192,14 +192,13 @@ const VisitorPage = () => {
           coloredText="Visit Profile"
           subText="Register your visit in just two simple steps with our streamlined, secure process designed for your convenience."
         />
-        
+
         <div className="flex flex-col gap-8 w-full max-w-3xl bg-white/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 shadow-2xl border border-white/50 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-red-50/30 rounded-3xl pointer-events-none"></div>
 
           <div className="relative z-10">
             <StepIndicator activeStep={activeStep} isOpen={isOpen} />
-
-            ={activeStep === 1 && (
+            {activeStep === 1 && (
               <FormStepOne
                 handleUserSubmit={handleUserSubmit}
                 formData={formData}

@@ -13,8 +13,6 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-white to-gray-100"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 to-red-50/20 pointer-events-none"></div>
 
       <main className="flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto px-6 md:px-8 py-10 md:py-20 gap-10 relative z-10 w-full">
         <div className="flex-1 flex flex-col items-center text-center gap-8">
